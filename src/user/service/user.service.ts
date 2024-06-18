@@ -19,10 +19,12 @@ export class UserService {
     const user = await this.usersRepository.findOne({
       where:{id:id}
     });
-    if (!user) {
+
+    const u = User.removePassword(user) as User
+    if (!u) {
       throw new NotFoundException();
     }
-    return user;
+    return u;
   }
 
   async findByEmail(email: string): Promise<User> {

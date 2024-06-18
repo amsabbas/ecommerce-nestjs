@@ -6,12 +6,25 @@ export class User {
   @PrimaryGeneratedColumn()
   id?: number;
 
+  @IsNotEmpty()
+  @Column()
+  name: string;
+
+  @IsNotEmpty()
+  @Column()
+  phone: string;
+
   @IsEmail()
   @Column({ unique: true })
   email: string;
 
   @IsNotEmpty()
   @Column()
-  password?: string;
+  password: string| undefined;
  
+  static removePassword(userObj: User)  {
+    return Object.fromEntries(
+      Object.entries(userObj).filter(([key, val]) => key !== 'password')
+    );
+  }
 }
