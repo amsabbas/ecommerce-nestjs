@@ -5,6 +5,7 @@ import { databaseConfig } from './config/database.config';
 import { UserModule } from './user/user.module';
 import  { AuthModule } from './auth/auth.module';
 import  { AdsModule } from './ads/ads.module';
+import { CategoryModule } from './category/category.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -14,7 +15,8 @@ import  { AdsModule } from './ads/ads.module';
     TypeOrmModule.forRootAsync(databaseConfig),
     AuthModule,
     UserModule,
-    AdsModule
+    AdsModule,
+    CategoryModule
   ],
   controllers: [],
   providers: [],
