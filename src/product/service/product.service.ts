@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "../../user/model/user.entity";
 import { Product } from "../model/product.entity";
+import { EditProduct } from "../model/edit.product.entity";
 
 @Injectable()
 export class ProductService {
@@ -43,6 +44,44 @@ export class ProductService {
 
     const inserted = await this.productRepository.save(product);
     return this.findById(inserted.id);
+  }
+
+  async edit(id: number,product: EditProduct): Promise<Product> {
+
+    const user = await this.usersRepository.findOne({
+        where:{id:id}
+      });
+     
+    if (user.role == "user") {
+        throw new BadRequestException([
+          'admin only can edit products',
+        ]);
+    }
+
+    const savedProduct = await this.productRepository.findOne({
+      where:{id:product.productID}
+    });
+
+    if (product.description != null){
+      savedProduct.description = product.description
+    }
+    if (product.name != null){
+      savedProduct.name = product.name
+    }
+    if (product.price != null){
+      savedProduct.price = product.price
+    }
+    if (product.quantity != null){
+      savedProduct.quantity = product.quantity
+    }
+    if (product.isAvailable != null){
+      savedProduct.isAvailable = product.isAvailable
+    }
+    if (product.photo_url != null){
+      savedProduct.photo_url = product.photo_url
+    }
+    const edited = await this.productRepository.save(savedProduct);
+    return this.findById(edited.id);
   }
 
   async remove(id: number,userId:number): Promise<void> {

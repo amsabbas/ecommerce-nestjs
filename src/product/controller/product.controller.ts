@@ -8,6 +8,7 @@ import { Product } from "../model/product.entity";
 import { JwtAuthGuard } from './../../auth/model/jwt-auth.guard';
 import { Req } from './../../auth/model/request-user';
 import { ProductService } from "../service/product.service";
+import { EditProduct } from "../model/edit.product.entity";
 
 @Controller('products')
 export class ProductController {
@@ -34,6 +35,12 @@ export class ProductController {
     @Post('createProduct')
     create(@Request() { user }: Req, @Body() product: Product): Promise<Product> {
       return this.productService.create(user.userId,product);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('editProduct')
+    editProduct(@Request() { user }: Req, @Body() product: EditProduct): Promise<Product> {
+      return this.productService.edit(user.userId,product);
     }
 }
   
