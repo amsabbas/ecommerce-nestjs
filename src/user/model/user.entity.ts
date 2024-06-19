@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsEmail, IsNotEmpty, IsString } from '@nestjs/class-validator';
+import { IsEmail, IsNotEmpty } from '@nestjs/class-validator';
 
 @Entity("Users")
 export class User {

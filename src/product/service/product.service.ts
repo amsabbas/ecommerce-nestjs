@@ -1,21 +1,21 @@
 import { BadRequestException,Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Category } from "../model/category.entity";
 import { Repository } from "typeorm";
 import { User } from "../../user/model/user.entity";
+import { Product } from "../model/product.entity";
 
 @Injectable()
-export class CategoryService {
+export class ProductService {
   constructor(
-    @InjectRepository(Category)
-    private categoryRepository: Repository<Category>,
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
 
 
-  async findById(id: number): Promise<Category> {
-    const ad = await this.categoryRepository.findOne({
+  async findById(id: number): Promise<Product> {
+    const ad = await this.productRepository.findOne({
       where:{id:id}
     });
 
@@ -25,12 +25,11 @@ export class CategoryService {
     return ad;
   }
 
-  async getAllCategories(): Promise<Category[]> {
-    const categories = await this.categoryRepository.find();
-    return categories;
+  async getAllProducts(): Promise<Product[]> {
+    return await this.productRepository.find();
   }
 
-  async create(id: number,category: Category): Promise<Category> {
+  async create(id: number,product: Product): Promise<Product> {
 
     const user = await this.usersRepository.findOne({
         where:{id:id}
@@ -38,11 +37,11 @@ export class CategoryService {
      
     if (user.role == "user") {
         throw new BadRequestException([
-          'admin only can create categories',
+          'admin only can create products',
         ]);
     }
 
-    const inserted = await this.categoryRepository.save(category);
+    const inserted = await this.productRepository.save(product);
     return this.findById(inserted.id);
   }
 
@@ -54,11 +53,11 @@ export class CategoryService {
    
   if (user.role == "user") {
       throw new BadRequestException([
-        'admin only can create categories',
+        'admin only can create products',
       ]);
   }
 
-    await this.categoryRepository.delete(id);
+    await this.productRepository.delete(id);
   }
 
   
