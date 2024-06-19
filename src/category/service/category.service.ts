@@ -46,7 +46,20 @@ export class CategoryService {
     return this.findById(inserted.id);
   }
 
+  async remove(id: number,userId:number): Promise<void> {
 
+  const user = await this.usersRepository.findOne({
+      where:{id:userId}
+    });
+   
+  if (user.role == "user") {
+      throw new BadRequestException([
+        'admin only can create ads',
+      ]);
+  }
+
+    await this.categoryRepository.delete(id);
+  }
 
   
 }

@@ -2,7 +2,7 @@ import {
     Body,
     Controller,
     Get,
-    Param, Post,   Request, UseGuards
+    Param, Post,   Request, UseGuards,Delete
   } from "@nestjs/common";
 import { AdsService } from "../service/ads.service";
 import { Ads } from "../model/ads.entity";
@@ -28,6 +28,12 @@ export class AdsController {
     @Post('createAd')
     create(@Request() { user }: Req, @Body() ads: Ads): Promise<Ads> {
       return this.adsService.create(user.userId,ads);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete(':id')
+    deleteById(@Request() { user }: Req,@Param('id') id: number): Promise<void> {
+    return this.adsService.remove(id,user.userId);
     }
 }
   

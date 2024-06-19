@@ -2,7 +2,7 @@ import {
     Body,
     Controller,
     Get,
-    Param, Post,   Request, UseGuards
+    Param, Post,   Request, UseGuards,Delete
   } from "@nestjs/common";
 import { CategoryService } from "../service/category.service";
 import { Category } from "../model/category.entity";
@@ -22,6 +22,12 @@ export class CategoryController {
     @Get(':id')
     getById(@Param('id') id: number): Promise<Category> {
       return this.categoryService.findById(id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete(':id')
+    deleteById(@Request() { user }: Req,@Param('id') id: number): Promise<void> {
+    return this.categoryService.remove(id,user.userId);
     }
 
     @UseGuards(JwtAuthGuard)
