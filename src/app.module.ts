@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { databaseConfig } from './config/database.config';
 import { UserModule } from './user/user.module';
 import  { AuthModule } from './auth/auth.module';
+import  { AdsModule } from './ads/ads.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -12,7 +13,8 @@ import  { AuthModule } from './auth/auth.module';
     }),
     TypeOrmModule.forRootAsync(databaseConfig),
     AuthModule,
-    UserModule
+    UserModule,
+    AdsModule
   ],
   controllers: [],
   providers: [],

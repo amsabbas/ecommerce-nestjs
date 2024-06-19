@@ -14,6 +14,10 @@ export class User {
   @Column()
   phone: string;
 
+  @IsNotEmpty()
+  @Column()
+  role: string;
+
   @IsEmail()
   @Column({ unique: true })
   email: string;
