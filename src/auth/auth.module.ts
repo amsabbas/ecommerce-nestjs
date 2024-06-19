@@ -7,6 +7,7 @@ import { jwtConstants } from './model/constants';
 import { JwtStrategy } from './model/jwt.strategy';
 import { AuthController } from '../auth/controller/auth.controller';
 import { UserService } from './../user/service/user.service';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -20,6 +21,16 @@ import { UserService } from './../user/service/user.service';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60m' },
     }),
+    MailerModule.forRoot({
+      transport:{
+        host:"smtp-mail.outlook.com",
+        port: 587,
+        auth:{
+          user:"amsabbbas@outlook.com",
+          pass:"A.m.sayed@123"
+        }
+      }
+     }),
   ],
   providers: [AuthService, UserService, JwtStrategy],
   controllers: [AuthController],

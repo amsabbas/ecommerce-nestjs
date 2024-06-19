@@ -60,5 +60,15 @@ export class UserService {
   async remove(id: number): Promise<void> {
     await this.usersRepository.delete(id);
   }
+
+
+  async updateUser(id: number, pass: string): Promise<any> {
+    const user = await this.usersRepository.findOne({
+      where:{id:id}
+    });
+
+    user.password = pass
+    return await this.usersRepository.save(user);
+  }
   
 }
