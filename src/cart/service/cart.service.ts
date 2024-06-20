@@ -14,17 +14,6 @@ export class CartService {
   ) {}
 
   async getMyCart(userId:number): Promise<Cart[]> {
-
-    const user = await this.usersRepository.findOne({
-      where:{id:userId}
-    });
-   
-  if (user.role == "user") {
-      throw new BadRequestException([
-        'admin only can create products',
-      ]);
-  }
-
     return await this.cartRepository.find({
         where: {user_id : userId}
       }
@@ -32,16 +21,6 @@ export class CartService {
   }
 
   async addToMyCart(id: number,cart: Cart): Promise<void> {
-
-    const user = await this.usersRepository.findOne({
-        where:{id:id}
-      });
-     
-    if (user.role == "user") {
-        throw new BadRequestException([
-          'admin only can create products',
-        ]);
-    }
 
     const product = await this.cartRepository.findOne({
       where:{product_id:cart.product_id,user_id : cart.user_id}
@@ -57,33 +36,12 @@ export class CartService {
 
 
   async remove(id: number,userId:number): Promise<boolean> {
-
-  const user = await this.usersRepository.findOne({
-      where:{id:userId}
-    });
-   
-  if (user.role == "user") {
-      throw new BadRequestException([
-        'admin only can delete products',
-      ]);
-  }
-
    const result = await this.cartRepository.delete(id);
    return result.affected > 0
   }
 
   async clearCart(userId:number): Promise<boolean> {
 
-    const user = await this.usersRepository.findOne({
-        where:{id:userId}
-      });
-     
-    if (user.role == "user") {
-        throw new BadRequestException([
-          'admin only can clear products',
-        ]);
-    }
-  
     const result = await this.cartRepository.delete({
         user_id:userId
       });
@@ -91,17 +49,7 @@ export class CartService {
     }
 
     async getCartCount(userId:number): Promise<number> {
-
-      const user = await this.usersRepository.findOne({
-        where:{id:userId}
-      });
-     
-      if (user.role == "user") {
-        throw new BadRequestException([
-          'admin only can create products',
-        ]);
-      }
-  
+      
       const cart = await this.cartRepository.find({
         where: {user_id : userId}
         }
