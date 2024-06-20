@@ -32,7 +32,7 @@ export class AdsController {
 
     @UseGuards(JwtAuthGuard)
     @Delete(':id')
-    deleteById(@Request() { user }: Req,@Param('id') id: number): Promise<void> {
+    deleteById(@Request() { user }: Req,@Param('id') id: number): Promise<boolean> {
     return this.adsService.remove(id,user.userId);
     }
 }

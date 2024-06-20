@@ -46,7 +46,7 @@ export class AdsService {
     return this.findById(inserted.id);
   }
 
-  async remove(id: number,userId:number): Promise<void> {
+  async remove(id: number,userId:number): Promise<boolean> {
 
     const user = await this.usersRepository.findOne({
         where:{id:userId}
@@ -58,7 +58,7 @@ export class AdsService {
         ]);
     }
   
-      await this.adsRepository.delete(id);
+     return (await this.adsRepository.delete(id)).affected > 0;
     }
   
 

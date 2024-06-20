@@ -74,9 +74,10 @@ export class ProductService {
     if (product.quantity != null){
       savedProduct.quantity = product.quantity
     }
-    if (product.isAvailable != null){
-      savedProduct.isAvailable = product.isAvailable
+    if (product.is_available != null){
+      savedProduct.is_available = product.is_available
     }
+    
     if (product.photo_url != null){
       savedProduct.photo_url = product.photo_url
     }

@@ -10,7 +10,7 @@ export class EditProduct {
 
   price?: number;
 
-  isAvailable?: boolean;
+  is_available?: boolean;
 
   quantity?: number;
 

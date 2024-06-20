@@ -30,7 +30,7 @@ export class Product {
 
   @IsNotEmpty()
   @Column()
-  isAvailable: boolean;
+  is_available: boolean;
 
   @IsNotEmpty()
   @Column()
