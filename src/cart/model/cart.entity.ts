@@ -1,6 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IsNotEmpty } from '@nestjs/class-validator';
-import { User } from 'src/user/model/user.entity';
 import { Product } from 'src/product/model/product.entity';
 
 @Entity("Cart")
@@ -20,12 +19,7 @@ export class Cart {
   @Column()
   quantity: number;
 
-
-  @ManyToMany(() => Product)
-  @JoinColumn()
-  product : Product;
-
-  @ManyToOne(() => User)
-  @JoinColumn()
-  user: User;
+  @ManyToOne(() => Product, product => product.cart, { eager: true })
+  @JoinColumn([{ name: "product_id", referencedColumnName: "id" }])
+  product: Product;
 }

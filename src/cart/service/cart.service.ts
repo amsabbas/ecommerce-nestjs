@@ -9,8 +9,6 @@ export class CartService {
   constructor(
     @InjectRepository(Cart)
     private cartRepository: Repository<Cart>,
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
   ) {}
 
   async getMyCart(userId:number): Promise<Cart[]> {
@@ -20,11 +18,13 @@ export class CartService {
     );
   }
 
-  async addToMyCart(id: number,cart: Cart): Promise<void> {
+  async addToMyCart(userId:number,cart: Cart): Promise<void> {
 
     const product = await this.cartRepository.findOne({
       where:{product_id:cart.product_id,user_id : cart.user_id}
     });
+
+    cart.user_id = userId;
 
     if (product) {
       product.quantity = cart.quantity
@@ -35,7 +35,7 @@ export class CartService {
   }
 
 
-  async remove(id: number,userId:number): Promise<boolean> {
+  async remove(id: number): Promise<boolean> {
    const result = await this.cartRepository.delete(id);
    return result.affected > 0
   }

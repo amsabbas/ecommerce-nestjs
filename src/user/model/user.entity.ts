@@ -25,7 +25,7 @@ export class User {
   @IsNotEmpty()
   @Column()
   password: string| undefined;
- 
+
   static removePassword(userObj: User)  {
     return Object.fromEntries(
       Object.entries(userObj).filter(([key, val]) => key !== 'password')

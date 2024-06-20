@@ -21,7 +21,7 @@ export class CartController {
 
     @Delete(':id')
     deleteById(@Request() { user }: Req,@Param('id') id: number): Promise<boolean> {
-     return this.cartService.remove(id,user.userId);
+     return this.cartService.remove(id);
     }
 
     @Post('addToMyCart')
