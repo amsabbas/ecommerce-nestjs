@@ -12,6 +12,7 @@ import { UserService } from '../service/user.service';
 import { User } from '../model/user.entity';
 import { JwtAuthGuard } from './../../auth/model/jwt-auth.guard';
 import { Req } from './../../auth/model/request-user';
+import { EditUser } from "../model/edit.user.entity";
 
 @UseGuards(JwtAuthGuard)
 @Controller('user')
@@ -36,6 +37,11 @@ export class UserController {
   @Post()
   create(@Body() user: User): Promise<User> {
     return this.userService.create(user);
+  }
+
+  @Post('editProfile')
+  edit(@Request() { user }: Req, @Body() newUser: EditUser): Promise<boolean> {
+      return this.userService.edit(user.userId,newUser);
   }
  
 }

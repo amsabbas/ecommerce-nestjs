@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Ads } from "../model/ads.entity";
 import { Repository } from "typeorm";
 import { User } from "../../user/model/user.entity";
-
+import { Constants } from '../../base/model/constants';
 @Injectable()
 export class AdsService {
   constructor(
@@ -36,7 +36,7 @@ export class AdsService {
         where:{id:id}
       });
      
-    if (user.role == "user") {
+    if (user.role == Constants.userNormal) {
         throw new BadRequestException([
           'admin only can create ads',
         ]);
@@ -52,7 +52,7 @@ export class AdsService {
         where:{id:userId}
       });
      
-    if (user.role == "user") {
+    if (user.role == Constants.userNormal) {
         throw new BadRequestException([
           'admin only can create ads',
         ]);

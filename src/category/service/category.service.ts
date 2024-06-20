@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Category } from "../model/category.entity";
 import { Repository } from "typeorm";
 import { User } from "../../user/model/user.entity";
-
+import { Constants } from '../../base/model/constants';
 @Injectable()
 export class CategoryService {
   constructor(
@@ -36,7 +36,7 @@ export class CategoryService {
         where:{id:id}
       });
      
-    if (user.role == "user") {
+    if (user.role == Constants.userNormal) {
         throw new BadRequestException([
           'admin only can create categories',
         ]);
@@ -52,7 +52,7 @@ export class CategoryService {
       where:{id:userId}
     });
    
-  if (user.role == "user") {
+  if (user.role == Constants.userNormal) {
       throw new BadRequestException([
         'admin only can delete categories',
       ]);

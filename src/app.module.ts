@@ -8,6 +8,7 @@ import  { AdsModule } from './ads/ads.module';
 import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
 import { CartModule } from './cart/cart.module';
+import { ConfigurationModule } from './base/config/config.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,7 +21,8 @@ import { CartModule } from './cart/cart.module';
     AdsModule,
     CategoryModule,
     ProductModule,
-    CartModule
+    CartModule,
+    ConfigurationModule
   ],
   controllers: [],
   providers: [],

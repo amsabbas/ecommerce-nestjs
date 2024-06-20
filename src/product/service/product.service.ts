@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { User } from "../../user/model/user.entity";
 import { Product } from "../model/product.entity";
 import { EditProduct } from "../model/edit.product.entity";
-
+import { Constants } from '../../base/model/constants';
 @Injectable()
 export class ProductService {
   constructor(
@@ -36,7 +36,7 @@ export class ProductService {
         where:{id:id}
       });
      
-    if (user.role == "user") {
+    if (user.role == Constants.userNormal) {
         throw new BadRequestException([
           'admin only can create products',
         ]);
@@ -52,7 +52,7 @@ export class ProductService {
         where:{id:id}
       });
      
-    if (user.role == "user") {
+    if (user.role == Constants.userNormal) {
         throw new BadRequestException([
           'admin only can edit products',
         ]);
@@ -90,7 +90,7 @@ export class ProductService {
       where:{id:userId}
     });
    
-  if (user.role == "user") {
+  if (user.role == Constants.userNormal) {
       throw new BadRequestException([
         'admin only can delete products',
       ]);

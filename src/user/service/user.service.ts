@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "../model/user.entity";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
+import { EditUser } from "../model/edit.user.entity";
 
 @Injectable()
 export class UserService {
@@ -41,7 +42,6 @@ export class UserService {
     return user;
   }
   async create(user: User): Promise<User> {
-    const count = await this.usersRepository.count();
     user.password = await UserService.hashPassword(user.password);
     const exist = await this.usersRepository.findOne({where : {
        email: user.email,
@@ -71,5 +71,29 @@ export class UserService {
     user.password = pass
     return await this.usersRepository.save(user);
   }
+
+  async edit(id: number,newUser: EditUser): Promise<boolean> {
+
+    const user = await this.usersRepository.findOne({
+      where:{id:id}
+    });
+
+    if (!user){
+      throw new BadRequestException([
+        'email not found.',
+      ])
+    }
+
+    if (newUser.phone != null){
+      user.phone = newUser.phone
+    }
+    if (newUser.name != null){
+      user.name = newUser.name
+    }
+    const edited = await this.usersRepository.save(user);
+    return edited.id != null
+  }
+
+
   
 }
