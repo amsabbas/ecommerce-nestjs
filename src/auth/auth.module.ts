@@ -19,7 +19,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     }),
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60m' },
+      signOptions: { expiresIn: '365d' },
     }),
     MailerModule.forRoot({
       transport:{

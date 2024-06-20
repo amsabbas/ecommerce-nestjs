@@ -15,14 +15,14 @@ export class CategoryService {
 
 
   async findById(id: number): Promise<Category> {
-    const ad = await this.categoryRepository.findOne({
+    const category = await this.categoryRepository.findOne({
       where:{id:id}
     });
 
-    if (!ad) {
+    if (!category) {
       throw new NotFoundException();
     }
-    return ad;
+    return category;
   }
 
   async getAllCategories(): Promise<Category[]> {
@@ -54,7 +54,7 @@ export class CategoryService {
    
   if (user.role == "user") {
       throw new BadRequestException([
-        'admin only can create categories',
+        'admin only can delete categories',
       ]);
   }
 

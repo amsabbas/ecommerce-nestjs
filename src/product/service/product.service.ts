@@ -16,14 +16,14 @@ export class ProductService {
 
 
   async findById(id: number): Promise<Product> {
-    const ad = await this.productRepository.findOne({
+    const product = await this.productRepository.findOne({
       where:{id:id}
     });
 
-    if (!ad) {
+    if (!product) {
       throw new NotFoundException();
     }
-    return ad;
+    return product;
   }
 
   async getAllProducts(): Promise<Product[]> {
@@ -84,7 +84,7 @@ export class ProductService {
     return this.findById(edited.id);
   }
 
-  async remove(id: number,userId:number): Promise<void> {
+  async remove(id: number,userId:number): Promise<boolean> {
 
   const user = await this.usersRepository.findOne({
       where:{id:userId}
@@ -92,11 +92,12 @@ export class ProductService {
    
   if (user.role == "user") {
       throw new BadRequestException([
-        'admin only can create products',
+        'admin only can delete products',
       ]);
   }
 
-    await this.productRepository.delete(id);
+    const result = await this.productRepository.delete(id);
+    return result.affected > 0
   }
 
   

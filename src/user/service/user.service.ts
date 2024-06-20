@@ -57,8 +57,9 @@ export class UserService {
     return this.findById(inserted.id);
   }
 
-  async remove(id: number): Promise<void> {
-    await this.usersRepository.delete(id);
+  async remove(id: number): Promise<boolean> {
+    const result = await this.usersRepository.delete(id);
+    return result.affected > 0
   }
 
 

@@ -7,6 +7,7 @@ import  { AuthModule } from './auth/auth.module';
 import  { AdsModule } from './ads/ads.module';
 import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
+import { CartModule } from './cart/cart.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -18,7 +19,8 @@ import { ProductModule } from './product/product.module';
     UserModule,
     AdsModule,
     CategoryModule,
-    ProductModule
+    ProductModule,
+    CartModule
   ],
   controllers: [],
   providers: [],
