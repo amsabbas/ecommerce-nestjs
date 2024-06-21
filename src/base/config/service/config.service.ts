@@ -1,17 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { Constants } from "src/base/model/constants";
-import { Config } from "../model/config.entity";
+import { AppInfo } from "../model/app.info.entity";
 
 
 @Injectable()
 export class ConfigService {
   constructor() {}
 
-  async getContacts(): Promise<Config> {
-    const config = new Config()
-    config.phone = Constants.phone,
-    config.facebookLink = Constants.facebookLink,
-    config.instagramLink = Constants.instagramLink
-    return config
+  async appInfo(): Promise<AppInfo> {
+    const info = new AppInfo()
+    info.phone = Constants.phone,
+    info.facebookLink = Constants.facebookLink,
+    info.instagramLink = Constants.instagramLink
+    info.deliveryTime = Constants.deliveryTime;
+    return info
   }  
 }

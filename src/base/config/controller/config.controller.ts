@@ -2,7 +2,7 @@ import {
     Controller,
     Get,
   } from "@nestjs/common";
-import { Config } from "../model/config.entity";
+import { AppInfo } from "../model/app.info.entity";
 import { ConfigService } from "../service/config.service";
 
 
@@ -12,9 +12,9 @@ export class ConfiController {
     ) {}
   
   
-    @Get('contacts')
-    getContacts(): Promise<Config> {
-      return this.configService.getContacts();
+    @Get('appInfo')
+    appInfo(): Promise<AppInfo> {
+      return this.configService.appInfo();
     }
 }
   
