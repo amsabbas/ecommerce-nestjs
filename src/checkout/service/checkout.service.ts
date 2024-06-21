@@ -1,7 +1,6 @@
 import { BadRequestException,Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { User } from "../../user/model/user.entity";
 import { Cart } from "src/cart/model/cart.entity";
 import { Cost } from "../model/cost.entity";
 import { Constants } from "src/base/model/constants";

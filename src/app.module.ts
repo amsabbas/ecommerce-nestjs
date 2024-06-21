@@ -11,6 +11,7 @@ import { CartModule } from './cart/cart.module';
 import { ConfigurationModule } from './base/config/config.module';
 import { PromoModule } from './promo/promo.module';
 import { CheckoutModule } from './checkout/checkout.module';
+import { AddressModule } from './address/address.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,7 +27,8 @@ import { CheckoutModule } from './checkout/checkout.module';
     CartModule,
     ConfigurationModule,
     PromoModule,
-    CheckoutModule
+    CheckoutModule,
+    AddressModule
   ],
   controllers: [],
   providers: [],
