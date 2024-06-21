@@ -51,7 +51,7 @@ export class AddressController {
 
     @Post('createAddress')
     createAddress(@Request() { user }: Req, @Body() address: Address): Promise<Address> {
-      return this.addressService.createAddress(address);
+      return this.addressService.createAddress(user.userId,address);
     }
 
     @Post('changeAddressToPrimary/:id')

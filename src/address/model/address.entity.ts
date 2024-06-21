@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { IsNotEmpty } from '@nestjs/class-validator';
+import { IsLatitude, IsLongitude, IsNotEmpty, isLongitude } from '@nestjs/class-validator';
 import { DecimalColumnTransformer } from 'src/base/utils/decimal.utils';
 import { Area } from './area.entity';
 
@@ -25,15 +25,15 @@ export class Address {
   apartment_no: string;
 
   @IsNotEmpty()
-  @Column('decimal', {
-    precision: 6, scale: 2 ,
+  @IsLatitude()
+  @Column('double', {
     transformer: new DecimalColumnTransformer(),
 })
   lat: number;
 
   @IsNotEmpty()
-  @Column('decimal', {
-    precision: 6, scale: 2 ,
+  @IsLongitude()
+  @Column('double', {
     transformer: new DecimalColumnTransformer(),
   })
   lon: number;

@@ -10,7 +10,7 @@ export class AddressService {
   constructor(
     @InjectRepository(Address)
     private addressRepository: Repository<Address>,
-    @InjectRepository(Address)
+    @InjectRepository(Area)
     private areaRepository: Repository<Area>,
     @InjectRepository(User)
     private usersRepository: Repository<User>,
@@ -74,8 +74,19 @@ export class AddressService {
     return this.findAreaById(inserted.id);
   }
 
-  async createAddress(address: Address): Promise<Address> {
-    const inserted = await this.areaRepository.save(address);
+  async createAddress(userId:number,address: Address): Promise<Address> {
+
+    const addressess = await this.addressRepository.find({
+      where : {user_id:userId}
+     });  
+    if (addressess.length <= 0){
+      address.is_primary = true
+    }else{
+      address.is_primary = false
+    }
+
+    address.user_id = userId;
+    const inserted = await this.addressRepository.save(address);
     return this.findAddressById(inserted.id);
   }
 
