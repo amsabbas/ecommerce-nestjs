@@ -24,7 +24,7 @@ export class User {
 
   @IsNotEmpty()
   @Column()
-  password: string| undefined;
+  password: string | undefined;
 
   static removePassword(userObj: User)  {
     return Object.fromEntries(

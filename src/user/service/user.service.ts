@@ -4,6 +4,10 @@ import { User } from "../model/user.entity";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { EditUser } from "../model/edit.user.entity";
+import { PageOptionsDto } from "src/base/pagination/page.options.dto";
+import { PageDto } from "src/base/pagination/page.dto";
+import { PageMetaDto } from "src/base/pagination/page.meta.dto";
+import { Constants } from "src/base/model/constants";
 
 @Injectable()
 export class UserService {
@@ -94,6 +98,33 @@ export class UserService {
     return edited.id != null
   }
 
+   async getUsers(
+    userId:number,
+    pageOptionsDto: PageOptionsDto,
+  ): Promise<PageDto<User>> {
 
+    const user = await this.usersRepository.findOne({
+      where:{id:userId}
+    });
+   
+    if (user.role == Constants.userNormal) {
+      throw new BadRequestException([
+        'admin only can get users',
+      ]);
+    }
+
+    const queryBuilder = this.usersRepository.createQueryBuilder("Users");
+    queryBuilder
+      //.orderBy("users.created_at", pageOptionsDto.order)
+      .skip(pageOptionsDto.skip)
+      .take(pageOptionsDto.take);
+
+    const itemCount = await queryBuilder.getCount();
+    const { entities } = await queryBuilder.getRawAndEntities();
+
+    const pageMetaDto = new PageMetaDto({ itemCount, pageOptionsDto });
+
+    return new PageDto(entities, pageMetaDto);
+  }
   
 }

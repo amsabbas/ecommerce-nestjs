@@ -3,22 +3,31 @@ import {
   Controller,
   Delete,
   Get,
-  Param, Post, Put,
+  Param, Post,
   Query,
   Request,
-  UseGuards
+  UseGuards,
 } from "@nestjs/common";
 import { UserService } from '../service/user.service';
 import { User } from '../model/user.entity';
 import { JwtAuthGuard } from './../../auth/model/jwt-auth.guard';
 import { Req } from './../../auth/model/request-user';
 import { EditUser } from "../model/edit.user.entity";
+import { PageOptionsDto } from "src/base/pagination/page.options.dto";
+import { PageDto } from "src/base/pagination/page.dto";
 
 @UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('getUsers')
+  getUsers(
+    @Request() { user }: Req,
+    @Query() pageOptionsDto: PageOptionsDto,
+  ): Promise<PageDto<User>> {
+    return this.userService.getUsers(user.userId,pageOptionsDto);
+  }
 
   @Get('profile')
   getProfile(@Request() { user }: Req): Promise<User> {
@@ -43,5 +52,7 @@ export class UserController {
   edit(@Request() { user }: Req, @Body() newUser: EditUser): Promise<boolean> {
       return this.userService.edit(user.userId,newUser);
   }
- 
+
+
+
 }
