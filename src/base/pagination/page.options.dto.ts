@@ -1,4 +1,4 @@
-import { Expose, Type } from "class-transformer";
+import { Type } from "class-transformer";
 import { IsEnum, IsInt, IsOptional, Max, Min } from '@nestjs/class-validator';
 import { Order } from "./order";
 
@@ -22,7 +22,6 @@ export class PageOptionsDto {
   @Max(50)
   @IsOptional()
   readonly take?: number = 10;
-
 
   get skip(): number {
     return (this.page - 1) * this.take;

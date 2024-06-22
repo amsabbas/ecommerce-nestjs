@@ -18,19 +18,19 @@ export class CartService {
     );
   }
 
-  async addToMyCart(userId:number,cart: Cart): Promise<void> {
+  async addToMyCart(userId:number,cart: Cart): Promise<Cart> {
+
+    cart.user_id = userId;
 
     const product = await this.cartRepository.findOne({
       where:{product_id:cart.product_id,user_id : cart.user_id}
     });
 
-    cart.user_id = userId;
-
-    if (product) {
+    if (product != null) {
       product.quantity = cart.quantity
-      await this.cartRepository.save(product);
+      return await this.cartRepository.save(product);
     }else{
-     await this.cartRepository.save(cart);
+      return await this.cartRepository.save(cart);
     }
   }
 

@@ -25,7 +25,7 @@ export class CartController {
     }
 
     @Post('addToMyCart')
-    addToMyCart(@Request() { user }: Req, @Body() cart: Cart): Promise<void> {
+    addToMyCart(@Request() { user }: Req, @Body() cart: Cart): Promise<Cart> {
       return this.cartService.addToMyCart(user.userId,cart);
     }
 

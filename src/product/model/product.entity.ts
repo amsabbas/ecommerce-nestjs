@@ -3,6 +3,7 @@ import { IsNotEmpty } from '@nestjs/class-validator';
 import { Category } from 'src/category/model/category.entity';
 import { DecimalColumnTransformer } from 'src/base/utils/decimal.utils';
 import { Cart } from 'src/cart/model/cart.entity';
+import { OrderItem } from 'src/order/model/order.item.entity';
 
 @Entity("Products")
 export class Product {
@@ -47,4 +48,7 @@ export class Product {
 
   @OneToMany(() => Cart, cart => cart.product, { eager: false })
   cart: Cart;
+
+  @OneToMany(() => OrderItem, order => order.product, { eager: false })
+  orderItem: OrderItem;
 }
