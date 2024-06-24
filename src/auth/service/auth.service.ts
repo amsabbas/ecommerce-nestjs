@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './../../user/service/user.service';
 import { User } from './../../user/model/user.entity';
@@ -13,6 +12,8 @@ import { JwtPayload } from '../model/jwt-payload';
 import { ForgotPassword } from './../../user/model/forgot-password';
 import { ResetPassword } from './../../user/model/reset-password';
 import { MailerService} from '@nestjs-modules/mailer';
+import { Role } from '../model/role.enum';
+import { Constants } from 'src/base/model/constants';
 
 @Injectable()
 export class AuthService {
@@ -32,13 +33,21 @@ export class AuthService {
   }
 
   async login(auth: AuthModel): Promise<TokenModel> {
+    
+    if (auth.email == null || auth.password == null){
+      throw new BadRequestException();
+    }
+    
     const user = await this.validateUser(auth.email, auth.password);
     if (!user) {
       throw new BadRequestException();
     }
+    
+    const role = user.role == Constants.userAdmin ? Role.Admin :  Role.User
     const payload: JwtPayload = {
       email: user.email,
       sub: user.id,
+      role: role
     };
     return {
       access_token: this.jwtService.sign(payload),

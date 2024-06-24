@@ -62,7 +62,7 @@ export class OrdersService {
     return product;
   }
 
-  async changeOrderStatus(userId:number,orderID:number,status:string): Promise<Order> {
+  async changeOrderStatus(orderID:number,status:string): Promise<Order> {
     const order = await this.orderRepository.findOne({
       where: {id : orderID}
     });

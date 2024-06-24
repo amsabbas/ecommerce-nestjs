@@ -1,16 +1,12 @@
-import { BadRequestException,Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Category } from "../model/category.entity";
 import { Repository } from "typeorm";
-import { User } from "../../user/model/user.entity";
-import { Constants } from '../../base/model/constants';
 @Injectable()
 export class CategoryService {
   constructor(
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
   ) {}
 
 
@@ -30,35 +26,13 @@ export class CategoryService {
     return categories;
   }
 
-  async create(id: number,category: Category): Promise<Category> {
-
-    const user = await this.usersRepository.findOne({
-        where:{id:id}
-      });
-     
-    if (user.role == Constants.userNormal) {
-        throw new BadRequestException([
-          'admin only can create categories',
-        ]);
-    }
-
+  async create(category: Category): Promise<Category> {
     const inserted = await this.categoryRepository.save(category);
     return this.findById(inserted.id);
   }
 
-  async remove(id: number,userId:number): Promise<void> {
-
-  const user = await this.usersRepository.findOne({
-      where:{id:userId}
-    });
-   
-  if (user.role == Constants.userNormal) {
-      throw new BadRequestException([
-        'admin only can delete categories',
-      ]);
-  }
-
-    await this.categoryRepository.delete(id);
+  async remove(id: number): Promise<boolean> {
+    return (await this.categoryRepository.delete(id)).affected > 0;
   }
 
   

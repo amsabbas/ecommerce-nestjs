@@ -1,7 +1,7 @@
 
 
 export class EditPromo {
-  id?: number ;
+  id: number ;
   is_available?: boolean;
   discount_value?: number; 
 }

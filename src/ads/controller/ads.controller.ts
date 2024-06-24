@@ -8,6 +8,9 @@ import { AdsService } from "../service/ads.service";
 import { Ads } from "../model/ads.entity";
 import { JwtAuthGuard } from './../../auth/model/jwt-auth.guard';
 import { Req } from './../../auth/model/request-user';
+import { Roles } from './../../auth/model/roles.decorator';
+import { Role } from './../../auth/model/role.enum';
+import { RolesGuard } from './../../auth/model/roles.guard';
 
 @Controller('ads')
 export class AdsController {
@@ -24,16 +27,18 @@ export class AdsController {
       return this.adsService.findById(id);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,RolesGuard)
     @Post('createAd')
+    @Roles(Role.Admin)
     create(@Request() { user }: Req, @Body() ads: Ads): Promise<Ads> {
-      return this.adsService.create(user.userId,ads);
+      return this.adsService.create(ads);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,RolesGuard)
     @Delete(':id')
+    @Roles(Role.Admin)
     deleteById(@Request() { user }: Req,@Param('id') id: number): Promise<boolean> {
-    return this.adsService.remove(id,user.userId);
+    return this.adsService.remove(id);
     }
 }
   
