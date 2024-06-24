@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IsEmail, IsNotEmpty } from '@nestjs/class-validator';
 
 @Entity("Users")
@@ -25,6 +25,9 @@ export class User {
   @IsNotEmpty()
   @Column()
   password: string | undefined;
+
+  @CreateDateColumn()
+  created_at: Date;  
 
   static removePassword(userObj: User)  {
     return Object.fromEntries(

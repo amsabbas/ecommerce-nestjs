@@ -13,6 +13,7 @@ import { PromoModule } from './promo/promo.module';
 import { CheckoutModule } from './checkout/checkout.module';
 import { AddressModule } from './address/address.module';
 import { OrderModule } from './order/order.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -30,7 +31,8 @@ import { OrderModule } from './order/order.module';
     PromoModule,
     CheckoutModule,
     AddressModule,
-    OrderModule
+    OrderModule,
+    DashboardModule
   ],
   controllers: [],
   providers: [],
