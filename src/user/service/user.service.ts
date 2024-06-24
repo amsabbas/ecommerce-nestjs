@@ -7,7 +7,7 @@ import { EditUser } from "../model/edit.user.entity";
 import { PageOptionsDto } from "src/base/pagination/page.options.dto";
 import { PageDto } from "src/base/pagination/page.dto";
 import { PageMetaDto } from "src/base/pagination/page.meta.dto";
-import { Constants } from "src/base/model/constants";
+
 
 @Injectable()
 export class UserService {
@@ -99,19 +99,8 @@ export class UserService {
   }
 
    async getUsers(
-    userId:number,
     pageOptionsDto: PageOptionsDto,
   ): Promise<PageDto<User>> {
-
-    const user = await this.usersRepository.findOne({
-      where:{id:userId}
-    });
-   
-    if (user.role == Constants.userNormal) {
-      throw new BadRequestException([
-        'admin only can get users',
-      ]);
-    }
 
     const queryBuilder = this.usersRepository.createQueryBuilder("Users");
     queryBuilder

@@ -7,15 +7,18 @@ import { Order } from './model/order.entity';
 import { Cart } from 'src/cart/model/cart.entity';
 import { OrderItem } from './model/order.item.entity';
 import { CartService } from 'src/cart/service/cart.service';
+import { CheckoutService } from 'src/checkout/service/checkout.service';
+import { Promo } from 'src/promo/model/promo.entity';
 
 @Module({
 imports: [
    TypeOrmModule.forFeature([Order]),
+   TypeOrmModule.forFeature([Promo]),
    TypeOrmModule.forFeature([OrderItem]),
    TypeOrmModule.forFeature([User]),
    TypeOrmModule.forFeature([Cart])],
   controllers: [OrderController],
-  providers: [OrdersService,CartService],
+  providers: [OrdersService,CartService,CheckoutService],
   exports: [TypeOrmModule],
 })
 export class OrderModule {}
