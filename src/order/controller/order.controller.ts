@@ -1,8 +1,7 @@
 import {
-    Body,
     Controller,
     Get,
-    Param, Post,   Request, UseGuards,Delete,
+    Post,Request, UseGuards,
     Query
   } from "@nestjs/common";
 import { JwtAuthGuard } from './../../auth/model/jwt-auth.guard';

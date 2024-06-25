@@ -10,6 +10,7 @@ import { PageDto } from "src/base/pagination/page.dto";
 import { PageMetaDto } from "src/base/pagination/page.meta.dto";
 import { CheckoutService } from "src/checkout/service/checkout.service";
 import { Product } from "src/product/model/product.entity";
+import { FirebaseService } from "src/firebase/firebase.repository";
 
 @Injectable()
 export class OrdersService {
@@ -20,6 +21,7 @@ export class OrdersService {
     private orderItemRepository: Repository<OrderItem>,
     private readonly cartService: CartService,
     private readonly checkoutService: CheckoutService,
+    private firebaseSerivce: FirebaseService
   ) {}
 
   async getMyOrders(userId:number): Promise<Order[]> {
@@ -88,6 +90,8 @@ export class OrdersService {
     }
   
     await this.cartService.clearCart(userId)
+
+    await this.firebaseSerivce.addOrder(inserted.id)
 
     return savedOrder
   }

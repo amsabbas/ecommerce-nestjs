@@ -9,9 +9,12 @@ import { OrderItem } from './model/order.item.entity';
 import { CartService } from 'src/cart/service/cart.service';
 import { CheckoutService } from 'src/checkout/service/checkout.service';
 import { Promo } from 'src/promo/model/promo.entity';
+import { FirebaseModule } from 'src/firebase/firebase.module';
+import { FirebaseService } from 'src/firebase/firebase.repository';
 
 @Module({
 imports: [
+   FirebaseModule,
    TypeOrmModule.forFeature([Order]),
    TypeOrmModule.forFeature([Promo]),
    TypeOrmModule.forFeature([OrderItem]),
