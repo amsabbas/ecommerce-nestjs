@@ -14,6 +14,7 @@ import { CheckoutModule } from './checkout/checkout.module';
 import { AddressModule } from './address/address.module';
 import { OrderModule } from './order/order.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { FileModule } from './file/file.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -32,7 +33,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
     CheckoutModule,
     AddressModule,
     OrderModule,
-    DashboardModule
+    DashboardModule,
+    FileModule
   ],
   controllers: [],
   providers: [],

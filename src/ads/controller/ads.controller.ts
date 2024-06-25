@@ -2,7 +2,7 @@ import {
     Body,
     Controller,
     Get,
-    Param, Post,   Request, UseGuards,Delete
+    Param, Post,   Request, UseGuards,Delete,
   } from "@nestjs/common";
 import { AdsService } from "../service/ads.service";
 import { Ads } from "../model/ads.entity";
@@ -11,6 +11,7 @@ import { Req } from './../../auth/model/request-user';
 import { Roles } from './../../auth/model/roles.decorator';
 import { Role } from './../../auth/model/role.enum';
 import { RolesGuard } from './../../auth/model/roles.guard';
+
 
 @Controller('ads')
 export class AdsController {
