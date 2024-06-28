@@ -36,6 +36,10 @@ export class CheckoutService {
        );
        if (promo != null){
         cost.discount = promo.discount_value
+       }else{
+        throw new BadRequestException([
+           "Promo not found",
+        ]);
        }
     }
 

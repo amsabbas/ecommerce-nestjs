@@ -28,6 +28,18 @@ export class PromoService {
   }
 
   async create(promo: Promo): Promise<Promo> {
+
+    const promoModel = await this.promoRepository.findOne({
+      where:{promo_code:promo.promo_code}
+    });
+
+    if (promoModel.id != null){
+      throw new BadRequestException([
+        'Promo already added.',
+      ])
+    }
+
+
     const inserted = await this.promoRepository.save(promo);
     return this.findById(inserted.id);
   }
@@ -45,7 +57,7 @@ export class PromoService {
 
       if (!promo|| promoModel.id == null){
         throw new BadRequestException([
-          'promo not found.',
+          'Promo not found.',
         ])
       }
 
