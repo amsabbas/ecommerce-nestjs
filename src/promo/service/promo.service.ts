@@ -33,7 +33,7 @@ export class PromoService {
       where:{promo_code:promo.promo_code}
     });
 
-    if (promoModel.id != null){
+    if (promoModel != null){
       throw new BadRequestException([
         'Promo already added.',
       ])

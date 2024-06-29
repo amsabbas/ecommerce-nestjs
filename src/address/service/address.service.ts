@@ -58,18 +58,7 @@ export class AddressService {
     return area;
   }
 
-  async createArea(id: number,area: Area): Promise<Area> {
-
-    const user = await this.usersRepository.findOne({
-        where:{id:id}
-      });
-     
-    if (user.role == Constants.userNormal) {
-        throw new BadRequestException([
-          'admin only can create areas',
-        ]);
-    }
-
+  async createArea(area: Area): Promise<Area> {
     const inserted = await this.areaRepository.save(area);
     return this.findAreaById(inserted.id);
   }
@@ -90,17 +79,7 @@ export class AddressService {
     return this.findAddressById(inserted.id);
   }
 
-  async removeArea(id: number,userId:number): Promise<boolean> {
-
-    const user = await this.usersRepository.findOne({
-        where:{id:userId}
-      });
-     
-    if (user.role == Constants.userNormal) {
-        throw new BadRequestException([
-          'admin only can delete area',
-        ]);
-    }
+  async removeArea(id: number): Promise<boolean> {
      await this.addressRepository.delete({
       area_id:id
      });
@@ -109,17 +88,6 @@ export class AddressService {
   }
 
   async removeAddress(id: number,userId:number): Promise<boolean> {
-
-    const user = await this.usersRepository.findOne({
-        where:{id:userId}
-      });
-     
-    if (user.role == Constants.userNormal) {
-        throw new BadRequestException([
-          'admin only can delete address',
-        ]);
-    }
-
     const address = await this.addressRepository.findOne({
       where : {id:id}
      });

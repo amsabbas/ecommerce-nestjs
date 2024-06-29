@@ -10,7 +10,7 @@ import { CartService } from 'src/cart/service/cart.service';
 import { CheckoutService } from 'src/checkout/service/checkout.service';
 import { Promo } from 'src/promo/model/promo.entity';
 import { FirebaseModule } from 'src/firebase/firebase.module';
-import { FirebaseService } from 'src/firebase/firebase.repository';
+import { OrderProduct } from './model/order.product.entity';
 
 @Module({
 imports: [
@@ -18,6 +18,7 @@ imports: [
    TypeOrmModule.forFeature([Order]),
    TypeOrmModule.forFeature([Promo]),
    TypeOrmModule.forFeature([OrderItem]),
+   TypeOrmModule.forFeature([OrderProduct]),
    TypeOrmModule.forFeature([User]),
    TypeOrmModule.forFeature([Cart])],
   controllers: [OrderController],

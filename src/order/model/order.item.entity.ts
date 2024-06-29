@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IsNotEmpty } from '@nestjs/class-validator';
-import { Product } from 'src/product/model/product.entity';
 import { Order } from './order.entity';
+import { OrderProduct } from './order.product.entity';
 
 @Entity("OrderItems")
 export class OrderItem {
@@ -20,9 +20,9 @@ export class OrderItem {
   @Column()
   quantity: number;
 
-  @ManyToOne(() => Product, product => product.orderItem, { eager: true })
+  @ManyToOne(() => OrderProduct, product => product.orderItem, { eager: true })
   @JoinColumn([{ name: "product_id", referencedColumnName: "id" }])
-  product: Product;
+  product: OrderProduct;
 
   @ManyToOne(() => Order, order => order.orderItem, { eager: false })
   @JoinColumn([{ name: "order_id", referencedColumnName: "id" }])

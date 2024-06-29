@@ -3,12 +3,15 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Product } from "../model/product.entity";
 import { EditProduct } from "../model/edit.product.entity";
+import { Cart } from "src/cart/model/cart.entity";
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
+    @InjectRepository(Cart)
+    private cartRepository: Repository<Cart>,
   ) {}
 
 
@@ -34,9 +37,14 @@ export class ProductService {
 
   async edit(product: EditProduct): Promise<Product> {
 
+    
     const savedProduct = await this.productRepository.findOne({
-      where:{id:product.productID}
+      where:{id:product.id}
     });
+
+    if (!product || product.id == null) {
+      throw new NotFoundException();
+    }
 
     if (product.description != null){
       savedProduct.description = product.description
@@ -53,7 +61,7 @@ export class ProductService {
     if (product.is_available != null){
       savedProduct.is_available = product.is_available
     }
-    
+      
     if (product.photo_url != null){
       savedProduct.photo_url = product.photo_url
     }
@@ -62,6 +70,7 @@ export class ProductService {
   }
 
   async remove(id: number): Promise<boolean> {
+    await this.cartRepository.delete({product_id: id})
     const result = await this.productRepository.delete(id);
     return result.affected > 0
   }

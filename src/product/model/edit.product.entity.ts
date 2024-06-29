@@ -1,6 +1,6 @@
 export class EditProduct {
   
-  productID : number
+  id : number
 
   name?: string;
 

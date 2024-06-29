@@ -47,7 +47,6 @@ export class Order {
 })
   deliveryFees: number;
   
-  
   @OneToMany(() => OrderItem, orderItem => orderItem.order, { eager: true })
   orderItem: OrderItem;
 }

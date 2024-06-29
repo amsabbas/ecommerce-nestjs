@@ -16,8 +16,7 @@ export class Promo {
   is_available: boolean;
 
   @IsNotEmpty()
-  @Column('decimal', {
-    precision: 6, scale: 2 ,
+  @Column('float', {
     transformer: new DecimalColumnTransformer(),
 })
   discount_value: number; 
