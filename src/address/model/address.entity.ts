@@ -38,7 +38,6 @@ export class Address {
   })
   lon: number;
 
-  @IsNotEmpty()
   @Column()
   is_primary: boolean;
 

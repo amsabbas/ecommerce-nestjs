@@ -51,7 +51,7 @@ export class OrderController {
 
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Roles(Role.Admin)
-    @Post('changeOrderStatus')
+    @Get('changeOrderStatus')
     changeOrderStatus(@Request() { user }: Req,@Query('order_id') orderID: number, @Query('status') status: string,): Promise<Order> {
       return this.orderService.changeOrderStatus(orderID,status);
     }  
