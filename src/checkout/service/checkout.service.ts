@@ -43,7 +43,10 @@ export class CheckoutService {
        }
     }
 
-    cost.total =   cost.subtotal + cost.deliveryFees - cost.discount
+    cost.total =   cost.subtotal + cost.deliveryFees - cost.discount;
+    if (cost.total < 0)
+      cost.total = 0
+
     return cost
   }
 

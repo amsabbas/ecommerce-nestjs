@@ -11,7 +11,6 @@ export class Cart {
   @Column()
   product_id: number;
 
-  @IsNotEmpty()
   @Column()
   user_id: number;
 

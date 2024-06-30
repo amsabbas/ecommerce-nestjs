@@ -20,29 +20,25 @@ export class Order {
   order_date: Date;   
 
   @IsNotEmpty()
-  @Column('decimal', {
-    precision: 6, scale: 2 ,
+  @Column('float', {
     transformer: new DecimalColumnTransformer(),
 })
   subtotal: number;
 
   @IsNotEmpty()
-  @Column('decimal', {
-    precision: 6, scale: 2 ,
+  @Column('float', {
     transformer: new DecimalColumnTransformer(),
 })
   discount: number;
   
   @IsNotEmpty()
-  @Column('decimal', {
-    precision: 6, scale: 2 ,
+  @Column('float', {
     transformer: new DecimalColumnTransformer(),
 })
   total: number;
 
   @IsNotEmpty()
-  @Column('decimal', {
-    precision: 6, scale: 2 ,
+  @Column('float', {
     transformer: new DecimalColumnTransformer(),
 })
   deliveryFees: number;

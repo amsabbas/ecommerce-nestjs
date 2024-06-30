@@ -26,14 +26,6 @@ export class OrderProduct {
 })
   price: number;
 
-  @IsNotEmpty()
-  @Column()
-  is_available: boolean;
-
-  @IsNotEmpty()
-  @Column()
-  quantity: number;
-
   @OneToMany(() => OrderItem, order => order.product, { eager: false })
   orderItem: OrderItem;
 }

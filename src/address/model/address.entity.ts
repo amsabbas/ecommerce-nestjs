@@ -42,7 +42,6 @@ export class Address {
   @Column()
   is_primary: boolean;
 
-  @IsNotEmpty()
   @Column()
   user_id: number;
 

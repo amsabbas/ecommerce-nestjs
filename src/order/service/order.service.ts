@@ -9,7 +9,6 @@ import { PageOptionsDto } from "src/base/pagination/page.options.dto";
 import { PageDto } from "src/base/pagination/page.dto";
 import { PageMetaDto } from "src/base/pagination/page.meta.dto";
 import { CheckoutService } from "src/checkout/service/checkout.service";
-import { Product } from "src/product/model/product.entity";
 import { FirebaseService } from "src/firebase/firebase.repository";
 import { OrderProduct } from "../model/order.product.entity";
 
@@ -21,7 +20,7 @@ export class OrdersService {
     @InjectRepository(OrderItem)
     private orderItemRepository: Repository<OrderItem>,
     @InjectRepository(OrderProduct)
-    private orderProductRepository: Repository<Order>,
+    private orderProductRepository: Repository<OrderProduct>,
     private readonly cartService: CartService,
     private readonly checkoutService: CheckoutService,
     private firebaseSerivce: FirebaseService
@@ -54,7 +53,7 @@ export class OrdersService {
       .skip(pageOptionsDto.skip)
       .take(pageOptionsDto.take)
       .leftJoinAndMapMany("Orders.info",OrderItem,"OrderItem","OrderItem.order_id = Orders.id")
-      .leftJoinAndMapMany("Orders.products",Product,"Product","Product.id = OrderItem.product_id");
+      .leftJoinAndMapMany("Orders.products",OrderProduct,"OrderProducts","OrderProducts.id = OrderItem.product_id");
 
     const itemCount = await queryBuilder.getCount();
     const { entities } = await queryBuilder.getRawAndEntities();
