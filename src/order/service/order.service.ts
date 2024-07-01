@@ -11,6 +11,8 @@ import { PageMetaDto } from "src/base/pagination/page.meta.dto";
 import { CheckoutService } from "src/checkout/service/checkout.service";
 import { FirebaseService } from "src/firebase/firebase.repository";
 import { OrderProduct } from "../model/order.product.entity";
+import { User } from "src/user/model/user.entity";
+import { Address } from "src/address/model/address.entity";
 
 @Injectable()
 export class OrdersService {
@@ -53,10 +55,18 @@ export class OrdersService {
       .skip(pageOptionsDto.skip)
       .take(pageOptionsDto.take)
       .leftJoinAndMapMany("Orders.info",OrderItem,"OrderItem","OrderItem.order_id = Orders.id")
-      .leftJoinAndMapMany("Orders.products",OrderProduct,"OrderProducts","OrderProducts.id = OrderItem.product_id");
+      .leftJoinAndMapMany("Orders.products",OrderProduct,"OrderProducts","OrderProducts.id = OrderItem.product_id")
+      .leftJoinAndMapOne("Orders.user",User,"Users","Users.id = Orders.user_id")
+      .leftJoinAndMapOne("Orders.user_address",Address,"Addresses","Addresses.user_id = Orders.user_id and Addresses.is_primary = true");
 
     const itemCount = await queryBuilder.getCount();
-    const { entities } = await queryBuilder.getRawAndEntities();
+    const { entities  } = await queryBuilder.getRawAndEntities();
+
+    entities.forEach((entity) => {
+      let cloneObject = { ... entity.user };
+      cloneObject.password = "---"
+      entity.user = cloneObject
+    });
 
     const pageMetaDto = new PageMetaDto({ itemCount, pageOptionsDto });
     

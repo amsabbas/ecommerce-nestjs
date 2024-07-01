@@ -1,5 +1,7 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IsEmail, IsNotEmpty } from '@nestjs/class-validator';
+import { Address } from 'src/address/model/address.entity';
+import { Order } from 'src/order/model/order.entity';
 
 @Entity("Users")
 export class User {
@@ -24,10 +26,16 @@ export class User {
 
   @IsNotEmpty()
   @Column()
-  password: string | undefined;
+  password: string;
 
   @CreateDateColumn()
   created_at: Date;  
+
+  @OneToMany(() => Address, address => address.user)
+  addresses: Address[];
+
+  @OneToMany(() => Order, order => order.user)
+  orders: Order[];
 
   static removePassword(userObj: User)  {
     return Object.fromEntries(

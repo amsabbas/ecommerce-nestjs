@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 import { IsNotEmpty } from '@nestjs/class-validator';
 import { OrderItem } from './order.item.entity';
 import { DecimalColumnTransformer } from 'src/base/utils/decimal.utils';
+import { User } from 'src/user/model/user.entity';
 
 @Entity("Orders")
 export class Order {
@@ -45,5 +46,8 @@ export class Order {
   
   @OneToMany(() => OrderItem, orderItem => orderItem.order, { eager: true })
   orderItem: OrderItem;
+
+  @ManyToOne(() => User, user => user.orders)
+  user: User;
 }
 

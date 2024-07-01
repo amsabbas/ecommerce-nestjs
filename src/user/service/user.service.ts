@@ -39,7 +39,7 @@ export class UserService {
 
       if (!user){
         throw new BadRequestException([
-          'email not exist.',
+          'Email not exist.',
         ])
       }
       

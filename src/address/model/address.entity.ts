@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 't
 import { IsLatitude, IsLongitude, IsNotEmpty, isLongitude } from '@nestjs/class-validator';
 import { DecimalColumnTransformer } from 'src/base/utils/decimal.utils';
 import { Area } from './area.entity';
+import { User } from 'src/user/model/user.entity';
 
 @Entity("Addresses")
 export class Address {
@@ -51,5 +52,8 @@ export class Address {
   @ManyToOne(() => Area, area => area.address, { eager: true })
   @JoinColumn([{ name: "area_id", referencedColumnName: "id" }])
   area: Area;
+
+  @ManyToOne(() => User, user => user.addresses)
+  user: User;
 
 }
