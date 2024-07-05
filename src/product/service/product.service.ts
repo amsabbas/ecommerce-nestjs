@@ -30,6 +30,14 @@ export class ProductService {
     return await this.productRepository.find();
   }
 
+  async getAllProductsByCategoryID(id:number): Promise<Product[]> {
+    return await this.productRepository.find(
+      {
+        where:{category_id:id}
+      }
+    );
+  }
+
   async create(product: Product): Promise<Product> {
     const inserted = await this.productRepository.save(product);
     return this.findById(inserted.id);
