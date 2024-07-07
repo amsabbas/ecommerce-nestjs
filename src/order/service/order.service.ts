@@ -13,6 +13,7 @@ import { FirebaseService } from "src/firebase/firebase.repository";
 import { OrderProduct } from "../model/order.product.entity";
 import { User } from "src/user/model/user.entity";
 import { Address } from "src/address/model/address.entity";
+import { ProductService } from "src/product/service/product.service";
 
 @Injectable()
 export class OrdersService {
@@ -25,6 +26,7 @@ export class OrdersService {
     private orderProductRepository: Repository<OrderProduct>,
     private readonly cartService: CartService,
     private readonly checkoutService: CheckoutService,
+    private readonly productService: ProductService,
     private firebaseSerivce: FirebaseService
   ) {}
 
@@ -99,13 +101,15 @@ export class OrdersService {
       orderItem.order_id = inserted.id
       orderItem.product_id = insertedProduct.id
       orderItem.quantity = cart.quantity
-      await this.orderItemRepository.save(orderItem);
-      
+      await this.orderItemRepository.save(orderItem); 
+      await this.productService.editQuantity(cart.product_id,cart.product.quantity-cart.quantity)
     }
   
     await this.cartService.clearCart(userId)
 
     await this.firebaseSerivce.addOrder(inserted.id)
+
+
 
     return savedOrder
   }

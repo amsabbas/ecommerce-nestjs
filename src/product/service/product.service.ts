@@ -77,6 +77,26 @@ export class ProductService {
     return this.findById(edited.id);
   }
 
+  async editQuantity(productId: number,quantity:number): Promise<Product> {
+    
+    const product = await this.productRepository.findOne({
+      where:{id:productId}
+    });
+
+    if (!product) {
+      throw new NotFoundException();
+    }
+
+    if (quantity < 0)
+      product.quantity = 0
+    else
+      product.quantity = quantity;
+
+    const edited = await this.productRepository.save(product);
+    return this.findById(edited.id);
+  }
+
+
   async remove(id: number): Promise<boolean> {
     await this.cartRepository.delete({product_id: id})
     const result = await this.productRepository.delete(id);

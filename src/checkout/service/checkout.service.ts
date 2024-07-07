@@ -57,7 +57,7 @@ export class CheckoutService {
       }
     );
 
-    carts.map(cart => { if (cart.quantity > cart.product.quantity) 
+    carts.map(cart => { if (cart.quantity > cart.product.quantity || !cart.product.is_available) 
       throw new BadRequestException([
         cart.product.name + " not available",
       ]);

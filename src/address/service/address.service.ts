@@ -29,11 +29,17 @@ export class AddressService {
   }
 
   async getPrimaryAddress(userId:number): Promise<Address> {
-    return await this.addressRepository.findOne(
+    const address = await this.addressRepository.findOne(
       {
         where : {user_id : userId, is_primary:true}
       }
     );
+
+    if (!address){
+      throw new NotFoundException();
+    }
+
+    return address;
   }
 
   async findAddressById(id: number): Promise<Address> {
