@@ -4,6 +4,7 @@ import { Category } from "../model/category.entity";
 import { Repository } from "typeorm";
 import { Product } from "src/product/model/product.entity";
 import { I18nContext, I18nService } from "nestjs-i18n";
+import { EditCategoryDTO } from "../model/edit.category.entity";
 @Injectable()
 export class CategoryService {
   constructor(
@@ -51,6 +52,20 @@ export class CategoryService {
     }
 
     return (await this.categoryRepository.delete(id)).affected > 0;
+  }
+
+
+  async editCategory(data:EditCategoryDTO): Promise<Category> {
+    const area = await this.categoryRepository.findOne({
+      where : {id:data.id}
+     });  
+     if (!area) {
+      throw new NotFoundException();
+    }
+     area.name = data.name;
+     const updated = await this.categoryRepository.save(area);
+     return this.findById(updated.id);
+
   }
 
   

@@ -13,6 +13,7 @@ import { Address } from "../model/address.entity";
 import { Roles } from './../../auth/model/roles.decorator';
 import { Role } from './../../auth/model/role.enum';
 import { RolesGuard } from './../../auth/model/roles.guard';
+import { EditAreaDTO } from "../model/edit.area.entity";
 
 
 @Controller('addresses')
@@ -38,6 +39,13 @@ export class AddressController {
     @Delete('area/:id')
     deleteAreaById(@Request() { user }: Req,@Param('id') id: number): Promise<boolean> {
     return this.addressService.removeArea(id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('editArea')
+    @Roles(Role.Admin)
+    editProduct(@Request() { user }: Req, @Body() area: EditAreaDTO): Promise<Area> {
+      return this.addressService.editArea(area);
     }
 
     @UseGuards(JwtAuthGuard)

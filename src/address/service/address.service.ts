@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Address } from "../model/address.entity";
 import { Area } from "../model/area.entity";
+import { EditAreaDTO } from "../model/edit.area.entity";
 @Injectable()
 export class AddressService {
   constructor(
@@ -87,6 +88,19 @@ export class AddressService {
      });
 
      return (await this.areaRepository.delete(id)).affected > 0;
+  }
+
+  async editArea(data:EditAreaDTO): Promise<Area> {
+    const area = await this.areaRepository.findOne({
+      where : {id:data.id}
+     });  
+     if (!area) {
+      throw new NotFoundException();
+    }
+     area.name = data.name;
+     const updated = await this.areaRepository.save(area);
+     return this.findAreaById(updated.id);
+
   }
 
   async removeAddress(id: number,userId:number): Promise<boolean> {

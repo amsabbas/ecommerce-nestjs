@@ -11,6 +11,7 @@ import { Req } from './../../auth/model/request-user';
 import { Roles } from './../../auth/model/roles.decorator';
 import { Role } from './../../auth/model/role.enum';
 import { RolesGuard } from './../../auth/model/roles.guard';
+import { EditCategoryDTO } from "../model/edit.category.entity";
 
 @Controller('categories')
 export class CategoryController {
@@ -39,6 +40,13 @@ export class CategoryController {
     @Roles(Role.Admin)
     create(@Request() { user }: Req, @Body() category: Category): Promise<Category> {
       return this.categoryService.create(category);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('editCategory')
+    @Roles(Role.Admin)
+    editProduct(@Request() { user }: Req, @Body() area: EditCategoryDTO): Promise<Category> {
+      return this.categoryService.editCategory(area);
     }
 }
   
