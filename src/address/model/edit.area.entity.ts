@@ -5,4 +5,6 @@ export class EditAreaDTO{
   id : number
   @IsNotEmpty()
   name: string;
+  @IsNotEmpty()
+  name_ar: string;
 }

@@ -11,6 +11,10 @@ export class Category {
   @Column()
   name: string;
 
+  @IsNotEmpty()
+  @Column()
+  name_ar: string;
+
   @OneToMany(() => Product, product => product.category, { eager: false })
   product: Product;
 }

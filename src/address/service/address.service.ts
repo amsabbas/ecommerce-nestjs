@@ -98,6 +98,7 @@ export class AddressService {
       throw new NotFoundException();
     }
      area.name = data.name;
+     area.name_ar = data.name_ar;
      const updated = await this.areaRepository.save(area);
      return this.findAreaById(updated.id);
 

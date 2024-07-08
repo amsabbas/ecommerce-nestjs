@@ -63,6 +63,7 @@ export class CategoryService {
       throw new NotFoundException();
     }
      area.name = data.name;
+     area.name_ar = data.name_ar;
      const updated = await this.categoryRepository.save(area);
      return this.findById(updated.id);
 

@@ -54,12 +54,22 @@ export class ProductService {
       throw new NotFoundException();
     }
 
-    if (product.description != null){
-      savedProduct.description = product.description
-    }
     if (product.name != null){
       savedProduct.name = product.name
     }
+
+    if (product.name_ar != null){
+      savedProduct.name_ar = product.name_ar
+    }
+
+    if (product.description != null){
+      savedProduct.description = product.description
+    }
+
+    if (product.description_ar != null){
+      savedProduct.description_ar = product.description_ar
+    }
+
     if (product.price != null){
       savedProduct.price = product.price
     }

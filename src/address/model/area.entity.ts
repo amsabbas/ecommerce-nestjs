@@ -11,6 +11,10 @@ export class Area {
   @Column()
   name: string;
 
+  @IsNotEmpty()
+  @Column()
+  name_ar: string;
+
   @OneToMany(() => Address, address => address.area, { eager: false })
   address: Address;
 }

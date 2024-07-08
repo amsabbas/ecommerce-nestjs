@@ -4,7 +4,11 @@ export class EditProduct {
 
   name?: string;
 
+  name_ar?: string;
+
   description?: string;
+
+  description_ar?: string;
 
   photo_url: string;
 
