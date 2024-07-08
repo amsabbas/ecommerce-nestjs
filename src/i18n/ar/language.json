@@ -1,0 +1,19 @@
+{
+    "register_account_exists": "الحساب بهذا البريد الإلكتروني موجود بالفعل" ,
+    "email_not_found" : "البريد الإلكتروني غير موجود",
+    "promo_not_found": "لم يتم العثور على الرمز الترويجي",
+    "promo_already_added": "تمت إضافة العرض الترويجي من قبل",
+    "cart_empty" : "سلة التسوق فارغة",
+    "order_changed" : "لقد تم تغيير حالة طلبك",
+    "pending": "قيد الانتظار",
+    "accepted": "مقبول",
+    "rejected": "مرفوض",
+    "not_available" : "غير متوفر",
+    "category_deletion_products_message" : "يجب عليك حذف المنتجات لهذه القسم",
+    "password_incorrect": "كلمة المرور غير صحيحة",
+    "email_sent_successfully": "تم إرسال البريد الإلكتروني بنجاح",
+    "error_sending_email": "حدث خطأ أثناء إرسال البريد الإلكتروني، يرجى المحاولة مرة أخرى",
+    "error": "خطأ",
+    "password_reset_successfully": "تم إعادة تعيين كلمة المرور بنجاح",
+    "user_not_found": "المستخدم غير موجود"
+}

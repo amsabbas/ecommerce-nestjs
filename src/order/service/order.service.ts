@@ -15,6 +15,7 @@ import { User } from "src/user/model/user.entity";
 import { Address } from "src/address/model/address.entity";
 import { ProductService } from "src/product/service/product.service";
 import { UserService } from "src/user/service/user.service";
+import { I18nContext, I18nService } from "nestjs-i18n";
 
 @Injectable()
 export class OrdersService {
@@ -29,7 +30,8 @@ export class OrdersService {
     private readonly checkoutService: CheckoutService,
     private readonly productService: ProductService,
     private firebaseSerivce: FirebaseService,
-    private userService : UserService
+    private userService : UserService,
+    private readonly i18n: I18nService,
   ) {}
 
   async getMyOrders(userId:number): Promise<Order[]> {
@@ -81,7 +83,9 @@ export class OrdersService {
 
     const carts = await this.cartService.getMyCart(userId)
     if (carts.length <= 0) {
-      throw new BadRequestException('Cart is empty');
+      throw new BadRequestException(
+        this.i18n.t('language.cart_empty', { lang: I18nContext.current().lang })
+       );
     }
 
     const costModel = await this.checkoutService.calculateCost(userId,promoCode);
@@ -134,7 +138,8 @@ export class OrdersService {
     order.status = status;
     const updated = this.orderRepository.save(order);
     const token = await this.userService.findTokenById(userID);
-    await this.firebaseSerivce.sendingNotificationOneUser(token,"Your order has been changed",status.toLocaleUpperCase());
+    await this.firebaseSerivce.sendingNotificationOneUser(token,
+      this.i18n.t('language.order_changed', { lang: I18nContext.current().lang }),"");
     return updated
   }
   

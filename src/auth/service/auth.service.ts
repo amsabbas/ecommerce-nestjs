@@ -14,13 +14,15 @@ import { ResetPassword } from './../../user/model/reset-password';
 import { MailerService} from '@nestjs-modules/mailer';
 import { Role } from '../model/role.enum';
 import { Constants } from 'src/base/model/constants';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private jwtService: JwtService,
-    private mailService : MailerService
+    private mailService : MailerService,
+    private readonly i18n: I18nService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User> {
@@ -40,7 +42,8 @@ export class AuthService {
     
     const user = await this.validateUser(auth.email, auth.password);
     if (!user) {
-      throw new BadRequestException();
+      throw new BadRequestException(
+        this.i18n.t('language.password_incorrect', { lang: I18nContext.current().lang }));
     }
     
     const role = user.role == Constants.userAdmin ? Role.Admin :  Role.User
@@ -62,7 +65,7 @@ export class AuthService {
     const user = await this.userService.findByEmail(forgotPassword.email);
     
     if (!user){
-      throw new BadRequestException('Invalid Email');
+      throw new BadRequestException(this.i18n.t('language.email_not_found', { lang: I18nContext.current().lang }));
     }
     const token =  await this.generateToken(user);
     return await this.sendResetMail(forgotPassword.email,token);
@@ -83,10 +86,10 @@ export class AuthService {
         +token+">Click this </a>"
     });
     if (mail){
-      return {message:"Email is sent successfuly"} ; 
+      return {message:this.i18n.t('language.email_sent_successfully', { lang: I18nContext.current().lang })} ; 
     }
     else {
-      return {message : "An error occurred while sending mail" } ; 
+      return {message : this.i18n.t('language.error_sending_email', { lang: I18nContext.current().lang }) } ; 
     }
   }
 
@@ -97,7 +100,7 @@ export class AuthService {
     const user = await this.userService.findById(userId);
 
     if (!user) {
-      return {message : "User does not exist" };
+      return {message :  this.i18n.t('language.user_not_found', { lang: I18nContext.current().lang }) };
     }
   
     const hashedPassword = await UserService.hashPassword(resetPassword.password);
@@ -105,8 +108,8 @@ export class AuthService {
     const passwordReset = await this.userService.updateUser(user.id,hashedPassword);
    
     if (!passwordReset) {
-      return { message: "Error" };
+      return { message: this.i18n.t('language.error', { lang: I18nContext.current().lang }) };
     }
-    return { message: "Your Password Has been Reset Successfully" };
+    return { message: this.i18n.t('language.password_reset_successfully', { lang: I18nContext.current().lang }) };
   }  
 }

@@ -16,11 +16,24 @@ import { OrderModule } from './order/order.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FileModule } from './file/file.module';
 import { FirebaseModule } from './firebase/firebase.module';
+import { HeaderResolver, I18nModule } from 'nestjs-i18n';
+import { join } from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: 'enviroments/.env',
       isGlobal: true,
+    }),
+    I18nModule.forRootAsync({
+      useFactory: () => ({
+        fallbackLanguage: 'en',
+        loaderOptions: {
+          path: join(__dirname, '/i18n/'),
+          watch: true,
+        },
+        typesOutputPath: join(__dirname, '../src/generated/i18n.generated.ts'),
+      }),
+      resolvers: [new HeaderResolver(['language'])],
     }),
     TypeOrmModule.forRootAsync(databaseConfig),
     AuthModule,

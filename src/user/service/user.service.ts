@@ -8,6 +8,7 @@ import { PageOptionsDto } from "src/base/pagination/page.options.dto";
 import { PageDto } from "src/base/pagination/page.dto";
 import { PageMetaDto } from "src/base/pagination/page.meta.dto";
 import { UserToken } from "../model/user.token.entity";
+import { I18nContext, I18nService } from 'nestjs-i18n';
 
 
 @Injectable()
@@ -17,6 +18,7 @@ export class UserService {
     private usersRepository: Repository<User>,
     @InjectRepository(UserToken)
     private usersTokenRepository: Repository<UserToken>,
+    private readonly i18n: I18nService
   ) {}
 
   static hashPassword(password: string): Promise<string> {
@@ -36,13 +38,11 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    const user = await this.usersRepository.findOne({    where: { email:email },
-    }
-    );
+    const user = await this.usersRepository.findOne({ where: { email:email },});
 
       if (!user){
         throw new BadRequestException([
-          'Email not exist.',
+          this.i18n.t('language.email_not_found', { lang: I18nContext.current().lang })
         ])
       }
       
@@ -55,7 +55,7 @@ export class UserService {
     }});
     if (exist) {
       throw new BadRequestException([
-        'Account with this email already exists.',
+        this.i18n.t('language.register_account_exists', { lang: I18nContext.current().lang })
       ]);
     }
   
@@ -87,7 +87,7 @@ export class UserService {
 
     if (!user){
       throw new BadRequestException([
-        'email not found.',
+        this.i18n.t('language.email_not_found', { lang: I18nContext.current().lang })
       ])
     }
 

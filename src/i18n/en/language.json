@@ -1,0 +1,19 @@
+{
+    "register_account_exists": "Account with this email already exists" ,
+    "email_not_found" : "Email not found",
+    "promo_not_found": "Promo not found",
+    "promo_already_added": "Promo already added",
+    "cart_empty" : "Cart is empty",
+    "order_changed" : "Your order status has been changed",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "not_available" : "not available",
+    "category_deletion_products_message" : "You must delete products assigned to this category",
+    "password_incorrect": "Password is incorrect",
+    "email_sent_successfully" : "Email is sent successfully",
+    "error_sending_email": "An error occurred while sending mail, please try again",
+    "error" : "Error",
+    "password_reset_successfully" : "Your Password Has been Reset Successfully",
+    "user_not_found" : "User does not exist"
+}

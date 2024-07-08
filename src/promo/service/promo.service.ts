@@ -3,11 +3,13 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Promo } from "../model/promo.entity";
 import { EditPromo } from "../model/edit.promo.entity";
+import { I18nContext, I18nService } from "nestjs-i18n";
 @Injectable()
 export class PromoService {
   constructor(
     @InjectRepository(Promo)
     private promoRepository: Repository<Promo>,
+    private readonly i18n: I18nService,
   ) {}
 
 
@@ -35,7 +37,7 @@ export class PromoService {
 
     if (promoModel != null){
       throw new BadRequestException([
-        'Promo already added.',
+        this.i18n.t('language.promo_already_added', { lang: I18nContext.current().lang })
       ])
     }
 
@@ -57,7 +59,7 @@ export class PromoService {
 
       if (!promo|| promoModel.id == null){
         throw new BadRequestException([
-          'Promo not found.',
+          this.i18n.t('language.promo_not_found', { lang: I18nContext.current().lang })
         ])
       }
 

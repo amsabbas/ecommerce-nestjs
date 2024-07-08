@@ -10,6 +10,8 @@
         "outDir": "dist/public",
         "watchAssets": true
       }
+      ,
+      { "include": "i18n/**/*", "watchAssets": true }
     ],
     "watchAssets": true
   }

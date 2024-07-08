@@ -1,10 +1,11 @@
-import { BadRequestException,Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException,Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Cart } from "src/cart/model/cart.entity";
 import { Cost } from "../model/cost.entity";
 import { Constants } from "src/base/model/constants";
 import { Promo } from "src/promo/model/promo.entity";
+import { I18nContext, I18nService } from "nestjs-i18n";
 
 @Injectable()
 export class CheckoutService {
@@ -13,6 +14,7 @@ export class CheckoutService {
     private cartRepository: Repository<Cart>,
     @InjectRepository(Promo)
     private promoRepository: Repository<Promo>,
+    private readonly i18n: I18nService,
   ) {}
 
 
@@ -34,11 +36,11 @@ export class CheckoutService {
          where: {promo_code : promoCode.toString() }
          }
        );
-       if (promo != null){
+       if (promo != null && promo.is_available){
         cost.discount = promo.discount_value
        }else{
         throw new BadRequestException([
-           "Promo not found",
+          this.i18n.t('language.promo_not_found', { lang: I18nContext.current().lang })
         ]);
        }
     }
@@ -59,7 +61,7 @@ export class CheckoutService {
 
     carts.map(cart => { if (cart.quantity > cart.product.quantity || !cart.product.is_available) 
       throw new BadRequestException([
-        cart.product.name + " not available",
+        cart.product.name + " " + this.i18n.t('language.not_available', { lang: I18nContext.current().lang })
       ]);
       }
     );

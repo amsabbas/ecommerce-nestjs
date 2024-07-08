@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Category } from "../model/category.entity";
 import { Repository } from "typeorm";
 import { Product } from "src/product/model/product.entity";
+import { I18nContext, I18nService } from "nestjs-i18n";
 @Injectable()
 export class CategoryService {
   constructor(
@@ -10,6 +11,7 @@ export class CategoryService {
     private categoryRepository: Repository<Category>,
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
+    private readonly i18n: I18nService,
   ) {}
 
 
@@ -44,7 +46,7 @@ export class CategoryService {
 
     if (products > 0) {
       throw new BadRequestException([
-        'You must delete products assigned to this category',
+        this.i18n.t('language.category_deletion_products_message', { lang: I18nContext.current().lang })
       ]);
     }
 

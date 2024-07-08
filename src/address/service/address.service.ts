@@ -1,8 +1,6 @@
-import { BadRequestException,Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { User } from "../../user/model/user.entity";
-import { Constants } from '../../base/model/constants';
 import { Address } from "../model/address.entity";
 import { Area } from "../model/area.entity";
 @Injectable()
@@ -12,8 +10,6 @@ export class AddressService {
     private addressRepository: Repository<Address>,
     @InjectRepository(Area)
     private areaRepository: Repository<Area>,
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
   ) {}
 
   async getAreas(): Promise<Area[]> {
