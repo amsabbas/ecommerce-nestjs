@@ -14,7 +14,15 @@ export class OrderProduct {
 
   @IsNotEmpty()
   @Column()
+  name_ar: string;
+
+  @IsNotEmpty()
+  @Column()
   description: string;
+
+  @IsNotEmpty()
+  @Column()
+  description_ar: string;
 
   @IsNotEmpty()
   @Column()
