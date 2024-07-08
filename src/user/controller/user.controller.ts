@@ -18,6 +18,7 @@ import { PageDto } from "src/base/pagination/page.dto";
 import { Roles } from './../../auth/model/roles.decorator';
 import { Role } from './../../auth/model/role.enum';
 import { RolesGuard } from './../../auth/model/roles.guard';
+import { NotificationRequestDTO } from "../model/notification.request.dto";
 
 
 @Controller('user')
@@ -64,5 +65,17 @@ export class UserController {
   @Post('editProfile')
   edit(@Request() { user }: Req, @Body() newUser: EditUser): Promise<boolean> {
       return this.userService.edit(user.userId,newUser);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('updateFcmToken')
+  updateFcmToken(@Request() { user }: Req, @Body() request: NotificationRequestDTO) {
+    return this.userService.updateFcmToken(user.userId,request.fcm_token);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  logout(@Request() { user }: Req) {
+    return this.userService.logout(user.userId);
   }
 }

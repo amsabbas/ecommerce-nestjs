@@ -7,6 +7,7 @@ import { EditUser } from "../model/edit.user.entity";
 import { PageOptionsDto } from "src/base/pagination/page.options.dto";
 import { PageDto } from "src/base/pagination/page.dto";
 import { PageMetaDto } from "src/base/pagination/page.meta.dto";
+import { UserToken } from "../model/user.token.entity";
 
 
 @Injectable()
@@ -14,6 +15,8 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(UserToken)
+    private usersTokenRepository: Repository<UserToken>,
   ) {}
 
   static hashPassword(password: string): Promise<string> {
@@ -116,4 +119,34 @@ export class UserService {
     return new PageDto(entities, pageMetaDto);
   }
   
+  async updateFcmToken(userID: number,token: string): Promise<any> {
+  
+    var userToken = await this.usersTokenRepository.findOne({
+      where: {user_id:userID}
+    })
+    
+    if (!userToken){
+      userToken = new UserToken();   
+    }
+    userToken.user_id = userID;
+    userToken.token = token;
+
+    return this.usersTokenRepository.save(userToken);
+  }
+
+  async logout(userID: number): Promise<boolean> {
+   const result =  await this.usersTokenRepository.delete({
+      user_id : userID
+    });
+    return result.affected > 0;
+  }
+
+  async findTokenById(id: number): Promise<string> {
+    const user = await this.usersTokenRepository.findOne({
+      where:{user_id:id}
+    });
+    return user.token;
+  }
+
+
 }

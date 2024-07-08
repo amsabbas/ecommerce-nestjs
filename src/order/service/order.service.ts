@@ -14,6 +14,7 @@ import { OrderProduct } from "../model/order.product.entity";
 import { User } from "src/user/model/user.entity";
 import { Address } from "src/address/model/address.entity";
 import { ProductService } from "src/product/service/product.service";
+import { UserService } from "src/user/service/user.service";
 
 @Injectable()
 export class OrdersService {
@@ -27,7 +28,8 @@ export class OrdersService {
     private readonly cartService: CartService,
     private readonly checkoutService: CheckoutService,
     private readonly productService: ProductService,
-    private firebaseSerivce: FirebaseService
+    private firebaseSerivce: FirebaseService,
+    private userService : UserService
   ) {}
 
   async getMyOrders(userId:number): Promise<Order[]> {
@@ -125,12 +127,14 @@ export class OrdersService {
     return product;
   }
 
-  async changeOrderStatus(orderID:number,status:string): Promise<Order> {
+  async changeOrderStatus(userID : number, orderID:number,status:string): Promise<Order> {
     const order = await this.orderRepository.findOne({
       where: {id : orderID}
     });
     order.status = status;
     const updated = this.orderRepository.save(order);
+    const token = await this.userService.findTokenById(userID);
+    await this.firebaseSerivce.sendingNotificationOneUser(token,"Your order has been changed",status.toLocaleUpperCase());
     return updated
   }
   

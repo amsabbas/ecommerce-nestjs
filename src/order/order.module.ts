@@ -13,6 +13,8 @@ import { FirebaseModule } from 'src/firebase/firebase.module';
 import { OrderProduct } from './model/order.product.entity';
 import { ProductService } from 'src/product/service/product.service';
 import { Product } from 'src/product/model/product.entity';
+import { UserService } from 'src/user/service/user.service';
+import { UserToken } from 'src/user/model/user.token.entity';
 
 @Module({
 imports: [
@@ -22,10 +24,11 @@ imports: [
    TypeOrmModule.forFeature([OrderItem]),
    TypeOrmModule.forFeature([OrderProduct]),
    TypeOrmModule.forFeature([User]),
+   TypeOrmModule.forFeature([UserToken]),
    TypeOrmModule.forFeature([Product]),
    TypeOrmModule.forFeature([Cart])],
   controllers: [OrderController],
-  providers: [OrdersService,CartService,CheckoutService,ProductService],
+  providers: [OrdersService,CartService,CheckoutService,ProductService,UserService],
   exports: [TypeOrmModule],
 })
 export class OrderModule {}

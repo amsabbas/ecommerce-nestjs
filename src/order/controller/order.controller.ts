@@ -2,7 +2,8 @@ import {
     Controller,
     Get,
     Post,Request, UseGuards,
-    Query
+    Query,
+    Body
   } from "@nestjs/common";
 import { JwtAuthGuard } from './../../auth/model/jwt-auth.guard';
 import { Req } from './../../auth/model/request-user';
@@ -13,6 +14,8 @@ import { Role } from './../../auth/model/role.enum';
 import { RolesGuard } from './../../auth/model/roles.guard';
 import { PageOptionsDto } from "src/base/pagination/page.options.dto";
 import { PageDto } from "src/base/pagination/page.dto";
+import { OrderPromoDTO } from "../model/order.promo.dto";
+import { OrderStatusDTO } from "../model/order.status.dto";
 
 @Controller('orders')
 export class OrderController {
@@ -44,16 +47,16 @@ export class OrderController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('createOrder')
-    createOrder(@Request() { user }: Req, @Query('promoCode') promo?: string): Promise<Order> {
-      return this.orderService.createOrder(user.userId,promo);
+    @Post('createOrder')
+    createOrder(@Request() { user }: Req, @Body() promo?: OrderPromoDTO): Promise<Order> {
+      return this.orderService.createOrder(user.userId,promo.promoCode);
     }    
 
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Roles(Role.Admin)
-    @Get('changeOrderStatus')
-    changeOrderStatus(@Request() { user }: Req,@Query('order_id') orderID: number, @Query('status') status: string,): Promise<Order> {
-      return this.orderService.changeOrderStatus(orderID,status);
+    @Post('changeOrderStatus')
+    changeOrderStatus(@Request() { user }: Req,@Body() orderStatus:OrderStatusDTO): Promise<Order> {
+      return this.orderService.changeOrderStatus(user.userId ,orderStatus.order_id,orderStatus.status);
     }  
 
 }
