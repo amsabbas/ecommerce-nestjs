@@ -77,12 +77,12 @@ export class AuthService {
   }
 
   async sendResetMail(toemail: string , token : string) {
-    
+    const host = Constants.host;
     const mail = await this.mailService.sendMail({
       to: toemail,
         from:"amsabbbas@outlook.com",
         subject: "Reset Password",
-        html:"<h1>Reset Password</h1> <h2>Welcome</h2><p>To reset your password, please click on this link</p><a href=http://localhost:3000/auth/reset?token="
+        html:"<h1>Reset Password</h1> <h2>Welcome</h2><p>To reset your password, please click on this link</p><a href=" + host + "/auth/reset?token="
         +token+">Click this </a>"
     });
     if (mail){
