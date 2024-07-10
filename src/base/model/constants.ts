@@ -6,5 +6,5 @@ export const Constants = {
   instagramLink: "https://instagram.com/",
   deliveryTime: 30,
   phone: "+201022065286",
-  host : "http://localhost:3000"
+  host : "http://64.227.65.185:3000"
 };
