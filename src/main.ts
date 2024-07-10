@@ -9,6 +9,11 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.useGlobalFilters(new ExceptionsFilter());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.enableCors({
+  allowedHeaders: '*',
+  origin: '*',
+  credentials: true,
+  });
   await app.listen(3000);
 }
 bootstrap();
