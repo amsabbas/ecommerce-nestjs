@@ -23,11 +23,11 @@ import { MailerModule } from '@nestjs-modules/mailer';
     }),
     MailerModule.forRoot({
       transport:{
-        host:"smtp-mail.outlook.com",
-        port: 587,
+        host:Constants.mailHost,
+        port: Constants.mailPort,
         auth:{
-          user:"amsabbbas@outlook.com",
-          pass:"A.m.sayed@123"
+          user:Constants.mailUser,
+          pass:Constants.mailPass
         }
       }
      }),

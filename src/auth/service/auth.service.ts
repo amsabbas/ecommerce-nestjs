@@ -41,9 +41,14 @@ export class AuthService {
     }
     
     const user = await this.validateUser(auth.email, auth.password);
+    
     if (!user) {
       throw new BadRequestException(
         this.i18n.t('language.password_incorrect', { lang: I18nContext.current().lang }));
+    }
+
+    if ((user.role.toLocaleLowerCase() == Role.User.toLocaleLowerCase() && auth.is_admin == true)){
+      throw new BadRequestException(this.i18n.t('language.email_not_found', { lang: I18nContext.current().lang }));
     }
     
     const role = user.role == Constants.userAdmin ? Role.Admin :  Role.User
