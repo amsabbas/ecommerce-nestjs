@@ -1,21 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { app } from 'firebase-admin';
 import { Messaging } from 'firebase-admin/lib/messaging/messaging';
-
+import { getDatabase  } from "firebase-admin/database";
 @Injectable()
 export class FirebaseService {
-  #db: FirebaseFirestore.Firestore;
   #messaging: Messaging;
-  #collection: FirebaseFirestore.CollectionReference;
 
   constructor(@Inject('FIREBASE_APP') private firebaseApp: app.App) {
-    this.#db = firebaseApp.firestore();
-    this.#collection = this.#db.collection('orders');
     this.#messaging = firebaseApp.messaging()
   }
 
   async addOrder(id:number) {
-    await this.#collection.add({"order_id": id})
+    const db = getDatabase();
+    db.ref('orders').push({'order_id': id,})
   }
 
   async sendingNotificationOneUser(token:string,title:string, message:string) {

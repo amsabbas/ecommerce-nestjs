@@ -23,8 +23,8 @@ const firebaseProvider = {
 
     return admin.initializeApp({
       credential: admin.credential.cert(firebaseConfig),
-      databaseURL: `https://${firebaseConfig.projectId}.firebaseio.com`,
-      storageBucket: `${firebaseConfig.projectId}.appspot.com`,
+      databaseURL: `https://${configService.get<string>('PROJECT_ID')}-default-rtdb.firebaseio.com`,
+      storageBucket: `${configService.get<string>('PROJECT_ID')}.appspot.com`,
     });
   },
 };
