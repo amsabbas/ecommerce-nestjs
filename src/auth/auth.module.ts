@@ -8,6 +8,7 @@ import { JwtStrategy } from './model/jwt.strategy';
 import { AuthController } from '../auth/controller/auth.controller';
 import { UserService } from './../user/service/user.service';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -21,16 +22,21 @@ import { MailerModule } from '@nestjs-modules/mailer';
       secret: Constants.secret,
       signOptions: { expiresIn: '365d' },
     }),
-    MailerModule.forRoot({
-      transport:{
-        host:Constants.mailHost,
-        port: Constants.mailPort,
-        auth:{
-          user:Constants.mailUser,
-          pass:Constants.mailPass
-        }
-      }
-     }),
+
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        transport: {
+          host: configService.get<string>('MAIL_HOST'),
+          port: configService.get<number>('MAIL_PORT'),
+          auth: {
+            user: configService.get<string>('MAIL_USER'),
+            pass: configService.get<string>('MAIL_PASS'),
+          },
+        },
+      }),
+      inject: [ConfigService],
+    }),
   ],
   providers: [AuthService, UserService, JwtStrategy],
   controllers: [AuthController],

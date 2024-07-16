@@ -3,7 +3,8 @@ import {
     Get,
     Post,Request, UseGuards,
     Query,
-    Body
+    Body,
+    Res
   } from "@nestjs/common";
 import { JwtAuthGuard } from './../../auth/model/jwt-auth.guard';
 import { Req } from './../../auth/model/request-user';
@@ -52,12 +53,22 @@ export class OrderController {
       return this.orderService.createOrder(user.userId,promo.promoCode);
     }    
 
+    @UseGuards(JwtAuthGuard)
+    @Post('createOnlineOrder')
+    createOnlineOrder(@Request() { user }: Req, @Body() promo?: OrderPromoDTO): Promise<string> {
+      return this.orderService.createOnlineOrder(user,promo.promoCode);
+    }    
+
+    @Get('paySuccess')
+    async paySuccess(@Query('token') token: string,@Query('promo') promo?: string) : Promise<void> {
+      return this.orderService.paySuccess(token ,promo);
+    }
+
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Roles(Role.Admin)
     @Post('changeOrderStatus')
     changeOrderStatus(@Request() { user }: Req,@Body() orderStatus:OrderStatusDTO): Promise<Order> {
       return this.orderService.changeOrderStatus(user.userId ,orderStatus.order_id,orderStatus.status);
     }  
-
 }
   

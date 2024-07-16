@@ -15,10 +15,15 @@ import { ProductService } from 'src/product/service/product.service';
 import { Product } from 'src/product/model/product.entity';
 import { UserService } from 'src/user/service/user.service';
 import { UserToken } from 'src/user/model/user.token.entity';
+import { AuthService } from 'src/auth/service/auth.service';
+import { HttpModule } from '@nestjs/axios';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
 imports: [
    FirebaseModule,
+   HttpModule,
+   AuthModule,
    TypeOrmModule.forFeature([Order]),
    TypeOrmModule.forFeature([Promo]),
    TypeOrmModule.forFeature([OrderItem]),
@@ -28,7 +33,7 @@ imports: [
    TypeOrmModule.forFeature([Product]),
    TypeOrmModule.forFeature([Cart])],
   controllers: [OrderController],
-  providers: [OrdersService,CartService,CheckoutService,ProductService,UserService],
+  providers: [OrdersService,CartService,CheckoutService,ProductService,UserService,AuthService],
   exports: [TypeOrmModule],
 })
 export class OrderModule {}

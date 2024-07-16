@@ -16,6 +16,16 @@ import { Address } from "src/address/model/address.entity";
 import { ProductService } from "src/product/service/product.service";
 import { UserService } from "src/user/service/user.service";
 import { I18nContext, I18nService } from "nestjs-i18n";
+import { OrderPaymentResponse } from "../model/order.payment.response";
+import { HttpService } from '@nestjs/axios';
+
+import { AuthService } from "src/auth/service/auth.service";
+import { catchError, lastValueFrom } from "rxjs";
+import { AxiosError } from "axios";
+import { ConfigService } from "@nestjs/config";
+import {  OrderPaymentBilling } from "../model/order.payment.billing";
+import { OrderPaymentItems } from "../model/order.payment.items";
+import { OrderPaymentRequest } from "../model/order.payment.request";
 
 @Injectable()
 export class OrdersService {
@@ -32,6 +42,9 @@ export class OrdersService {
     private firebaseSerivce: FirebaseService,
     private userService : UserService,
     private readonly i18n: I18nService,
+    private authService: AuthService,
+    private readonly httpService: HttpService,
+    private configService: ConfigService
   ) {}
 
   async getMyOrders(userId:number): Promise<Order[]> {
@@ -91,6 +104,7 @@ export class OrdersService {
     const costModel = await this.checkoutService.calculateCost(userId,promoCode);
 
     const order = new Order()
+    order.payment_type = "cash"
     order.status = "pending"
     order.user_id = userId;
     order.discount = costModel.discount;
@@ -115,9 +129,109 @@ export class OrdersService {
 
     await this.firebaseSerivce.addOrder(inserted.id)
 
-
-
     return savedOrder
+  }
+
+  async createOnlineOrder(user:any,promoCode?:String): Promise<string> {
+
+    const userModel = await this.userService.findById(user.user_id);
+    const carts = await this.cartService.getMyCart(user.user_id)
+    if (carts.length <= 0) {
+      throw new BadRequestException(
+        this.i18n.t('language.cart_empty', { lang: I18nContext.current().lang })
+       );
+    }
+
+    const costModel = await this.checkoutService.calculateCost(user.user_id,promoCode);
+    
+    const paymentToken = this.configService.get<string>('PAYMENT_TOKEN');
+    const cardNumber = this.configService.get<string>('PAYMENT_CARD_ID');
+    const publicKey = this.configService.get<string>('PAYMENT_PUBLIC_KEY');
+    const host = this.configService.get<string>('HOST');
+
+    const amount = costModel.total * 100;
+    const currency =  "EGP";
+    let redirectionUrl = host + "/orders/paySuccess?token=" + await this.authService.generateToken(userModel) ;
+    if (promoCode != null ) redirectionUrl +="&promo=" + promoCode;
+    const paymentMethods = [12,"card",cardNumber];
+    const billingData = new OrderPaymentBilling(userModel.email,userModel.phone,userModel.name);
+    const items = [];
+
+    console.log(amount)
+
+    for await (const cart of carts){
+      const cartDiscount = costModel.discount / cart.quantity;
+      const cartFees = costModel.deliveryFees / cart.quantity;
+      let cartPrice = (cart.product.price * cart.quantity) + cartFees - cartDiscount;
+      if (cartPrice < 0) cartPrice = 0;
+      items.push(new OrderPaymentItems(cart.product.name,cartPrice * 100,cart.product.description,cart.quantity))
+    }
+
+    const data = new OrderPaymentRequest(
+      amount,currency,redirectionUrl,items,billingData, paymentMethods
+    )
+
+    const headersRequest = {
+      'Content-Type': 'application/json',
+      'Authorization': paymentToken,
+    };
+
+    const url = "https://accept.paymob.com/v1/intention/";
+    const result  = await lastValueFrom(this.httpService.request({url:url, headers: headersRequest,method:'post',data:data })
+    .pipe(
+      catchError((error: AxiosError) => {
+        console.log(error.message);
+        console.log(error.response.data);
+        throw new BadRequestException();
+      })));
+
+
+    const response = new OrderPaymentResponse();
+    response.public_key = publicKey;
+    response.client_secret = result.data.client_secret;
+
+    const paymentURL  = "https://accept.paymob.com/unifiedcheckout/?publicKey=" 
+    + response.public_key + "&clientSecret=" + response.client_secret
+
+    return paymentURL;
+  }
+
+  async paySuccess(token:string,promoCode?:String): Promise<void> {
+  
+    const user = await this.authService.getUserFromToken(token);
+    const carts = await this.cartService.getMyCart(user.userId)
+    if (carts.length <= 0) {
+      throw new BadRequestException(
+        this.i18n.t('language.cart_empty', { lang: I18nContext.current().lang })
+       );
+    }
+
+    const costModel = await this.checkoutService.calculateCost(user.userId,promoCode);
+
+    const order = new Order()
+    order.payment_type = "visa"
+    order.status = "pending"
+    order.user_id = user.userId;
+    order.discount = costModel.discount;
+    order.deliveryFees = costModel.deliveryFees;
+    order.subtotal = costModel.subtotal;
+    order.total = costModel.total;
+
+    const inserted = await this.orderRepository.save(order);
+    
+    for await (const cart of carts){
+      const insertedProduct =  await this.orderProductRepository.save(cart.product);
+      const orderItem = new OrderItem()
+      orderItem.order_id = inserted.id
+      orderItem.product_id = insertedProduct.id
+      orderItem.quantity = cart.quantity
+      await this.orderItemRepository.save(orderItem); 
+      await this.productService.editQuantity(cart.product_id,cart.product.quantity-cart.quantity)
+    }
+  
+    await this.cartService.clearCart(user.userId)
+
+    await this.firebaseSerivce.addOrder(inserted.id)
   }
 
   async findById(id: number): Promise<Order> {

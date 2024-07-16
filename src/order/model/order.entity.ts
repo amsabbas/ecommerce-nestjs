@@ -15,6 +15,10 @@ export class Order {
 
   @IsNotEmpty()
   @Column()
+  payment_type: string;
+
+  @IsNotEmpty()
+  @Column()
   user_id: number;
 
   @CreateDateColumn()

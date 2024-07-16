@@ -15,6 +15,7 @@ import { MailerService} from '@nestjs-modules/mailer';
 import { Role } from '../model/role.enum';
 import { Constants } from 'src/base/model/constants';
 import { I18nContext, I18nService } from 'nestjs-i18n';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -23,6 +24,7 @@ export class AuthService {
     private jwtService: JwtService,
     private mailService : MailerService,
     private readonly i18n: I18nService,
+    private configService: ConfigService
   ) {}
 
   async validateUser(email: string, password: string): Promise<User> {
@@ -81,8 +83,12 @@ export class AuthService {
     return this.jwtService.sign(payload); 
   }
 
+  async getUserFromToken(token:string) :Promise<any> {
+    return this.jwtService.decode(token);
+  }
+
   async sendResetMail(toemail: string , token : string) {
-    const host = Constants.host;
+    const host = this.configService.get<string>('HOST');
     const mail = await this.mailService.sendMail({
       to: toemail,
         from:"amsabbbas@outlook.com",
