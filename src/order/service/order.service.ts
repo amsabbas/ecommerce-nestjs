@@ -150,6 +150,7 @@ export class OrdersService {
     const host = this.configService.get<string>('HOST');
 
     const amount = costModel.total * 100;
+
     const currency =  "EGP";
     let redirectionUrl = host + "/orders/paySuccess?token=" + await this.authService.generateToken(userModel) ;
     if (promoCode != null ) redirectionUrl +="&promo=" + promoCode;
@@ -157,12 +158,13 @@ export class OrdersService {
     const billingData = new OrderPaymentBilling(userModel.email,userModel.phone,userModel.name);
     const items = [];
 
-    console.log(amount)
+    let totalPrice = 0
+    carts.map(cart => totalPrice += (cart.product.price * cart.quantity))  
 
     for await (const cart of carts){
-      const cartDiscount = costModel.discount / cart.quantity;
-      const cartFees = costModel.deliveryFees / cart.quantity;
-      let cartPrice = (cart.product.price * cart.quantity) + cartFees - cartDiscount;
+      const cartDiscount = costModel.discount  * cart.product.price/totalPrice
+      const cartFees = costModel.deliveryFees * cart.product.price/totalPrice
+      let cartPrice = ((cart.product.price) + cartFees - cartDiscount);
       if (cartPrice < 0) cartPrice = 0;
       items.push(new OrderPaymentItems(cart.product.name,cartPrice * 100,cart.product.description,cart.quantity))
     }
