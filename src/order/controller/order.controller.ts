@@ -68,7 +68,7 @@ export class OrderController {
     @Roles(Role.Admin)
     @Post('changeOrderStatus')
     changeOrderStatus(@Request() { user }: Req,@Body() orderStatus:OrderStatusDTO): Promise<Order> {
-      return this.orderService.changeOrderStatus(user.userId ,orderStatus.order_id,orderStatus.status);
+      return this.orderService.changeOrderStatus(orderStatus.order_id,orderStatus.status);
     }  
 }
   

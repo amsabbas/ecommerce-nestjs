@@ -246,13 +246,13 @@ export class OrdersService {
     return product;
   }
 
-  async changeOrderStatus(userID : number, orderID:number,status:string): Promise<Order> {
+  async changeOrderStatus(orderID:number,status:string): Promise<Order> {
     const order = await this.orderRepository.findOne({
       where: {id : orderID}
     });
     order.status = status;
     const updated = this.orderRepository.save(order);
-    const token = await this.userService.findTokenById(userID);
+    const token = await this.userService.findTokenById(order.user_id);
     await this.firebaseSerivce.sendingNotificationOneUser(token,
       this.i18n.t('language.order_changed', { lang: I18nContext.current().lang }),"");
     return updated
