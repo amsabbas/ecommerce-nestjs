@@ -132,17 +132,17 @@ export class OrdersService {
     return savedOrder
   }
 
-  async createOnlineOrder(user:any,promoCode?:String): Promise<string> {
+  async createOnlineOrder(userId:number,promoCode?:String): Promise<string> {
 
-    const userModel = await this.userService.findById(user.user_id);
-    const carts = await this.cartService.getMyCart(user.user_id)
+    const userModel = await this.userService.findById(userId);
+    const carts = await this.cartService.getMyCart(userId)
     if (carts.length <= 0) {
       throw new BadRequestException(
         this.i18n.t('language.cart_empty', { lang: I18nContext.current().lang })
        );
     }
 
-    const costModel = await this.checkoutService.calculateCost(user.user_id,promoCode);
+    const costModel = await this.checkoutService.calculateCost(userId,promoCode);
     
     const paymentToken = this.configService.get<string>('PAYMENT_TOKEN');
     const cardNumber = this.configService.get<string>('PAYMENT_CARD_ID');
@@ -199,7 +199,6 @@ export class OrdersService {
   }
 
   async paySuccess(token:string,promoCode?:String): Promise<void> {
-  
     const user = await this.authService.getUserFromToken(token);
     const carts = await this.cartService.getMyCart(user.userId)
     if (carts.length <= 0) {

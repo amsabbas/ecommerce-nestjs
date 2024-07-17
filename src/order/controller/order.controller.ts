@@ -56,7 +56,7 @@ export class OrderController {
     @UseGuards(JwtAuthGuard)
     @Post('createOnlineOrder')
     createOnlineOrder(@Request() { user }: Req, @Body() promo?: OrderPromoDTO): Promise<string> {
-      return this.orderService.createOnlineOrder(user,promo.promoCode);
+      return this.orderService.createOnlineOrder(user.userId,promo.promoCode);
     }    
 
     @Get('paySuccess')
