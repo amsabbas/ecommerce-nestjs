@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { Product } from "../model/product.entity";
 import { EditProduct } from "../model/edit.product.entity";
 import { Cart } from "src/cart/model/cart.entity";
@@ -26,8 +26,28 @@ export class ProductService {
     return product;
   }
 
-  async getAllProducts(): Promise<Product[]> {
-    return await this.productRepository.find();
+  async getAllProducts(keyword?:string): Promise<Product[]> {
+    if (keyword == null){
+      return await this.productRepository.find();
+    }
+    else{
+      return await this.productRepository.find({
+        where : [
+          {
+            name: Like(`%${keyword}%`),
+          },
+          {
+            name_ar: Like(`%${keyword}%`),
+          },
+          {
+            description: Like(`%${keyword}%`),
+          },
+          {
+            description_ar: Like(`%${keyword}%`),
+          },
+        ]
+      });
+    }
   }
 
   async getAllProductsByCategoryID(id:number): Promise<Product[]> {

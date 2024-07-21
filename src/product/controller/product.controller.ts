@@ -2,7 +2,8 @@ import {
     Body,
     Controller,
     Get,
-    Param, Post,   Request, UseGuards,Delete
+    Param, Post,   Request, UseGuards,Delete,
+    Query
   } from "@nestjs/common";
 import { Product } from "../model/product.entity";
 import { JwtAuthGuard } from './../../auth/model/jwt-auth.guard';
@@ -18,8 +19,8 @@ export class ProductController {
   
   
     @Get('getAllProducts')
-    getAllProducts(): Promise<Product[]> {
-      return this.productService.getAllProducts();
+    getAllProducts(@Query('keyword') keyword?: string): Promise<Product[]> {
+      return this.productService.getAllProducts(keyword);
     }
 
     @Get('getAllProductsByCategoryID/:id')
