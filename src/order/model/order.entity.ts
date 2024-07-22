@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IsNotEmpty } from '@nestjs/class-validator';
 import { OrderItem } from './order.item.entity';
 import { DecimalColumnTransformer } from 'src/base/utils/decimal.utils';
